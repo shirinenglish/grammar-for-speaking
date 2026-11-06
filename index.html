@@ -204,7 +204,7 @@ textarea{width:100%;margin:12px 0 6px}
 .form label{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .form input{flex:1;min-width:160px}
 .profile{display:flex;gap:14px;margin-top:14px;padding:16px;border-radius:14px;background:var(--wine);color:var(--on-wine)}
-.profile .pic{flex:0 0 52px;height:52px;border-radius:50%;background:var(--mark);color:var(--mark-ink);display:grid;place-items:center;font-family:var(--head);font-weight:800;font-size:1.4rem}
+.profile .pic{flex:0 0 46px;height:46px;border-radius:50%;background:var(--mark);color:var(--mark-ink);display:grid;place-items:center;font-size:1.3rem}
 .profile strong{font-family:var(--head);font-size:1.15rem}
 .profile small{display:block;opacity:.85}
 .profile p{margin:8px 0 0}
@@ -260,49 +260,28 @@ const DAYS = [
 const LEVELS = { b1:["Stage 1: B1","days 1 to 5"], b2:["Stage 2: B2","days 6 to 11"], c1:["Stage 3: C1","days 12 to 15"] };
 
 /* ===================== DAY CONTENT ===================== */
+const box = (title, inner) => `<div class="box"><p class="q">${title}</p>${inner}</div>`;
+const uses = arr => `<div class="uses">${arr.map(u => `<div><strong>${u[0]}</strong><span>${u[1]}</span></div>`).join("")}</div>`;
+const tbl = (head, rows) => `<div class="table-wrap"><table><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</table></div>`;
+const tip = t => `<div class="tip"><strong>Exam tip:</strong> ${t}</div>`;
+const freqScale = `<div class="scale">
+  <div><span>always</span><i style="width:100%"></i></div><div><span>usually</span><i style="width:85%"></i></div>
+  <div><span>often</span><i style="width:65%"></i></div><div><span>sometimes</span><i style="width:45%"></i></div>
+  <div><span>rarely / hardly ever</span><i style="width:15%"></i></div><div><span>never</span><i style="width:2%"></i></div></div>`;
+
 const CONTENT = {
+/* ---------------- DAY 1 ---------------- */
 1: [
   { type:"poll", title:"How often do you…?", sub:"Tap your answer. There are no wrong answers here.",
     options:["always","usually","sometimes","never"],
-    items:[["How often do you drink tea?","drink tea"],["How often do you read in English?","read in English"],["How often do you speak English outside class?","speak English outside class"],["How often do you go to bed after midnight?","go to bed after midnight"]],
+    items:[["How often do you drink tea?","I {x} drink tea."],["How often do you read in English?","I {x} read in English."],["How often do you speak English outside class?","I {x} speak English outside class."],["How often do you go to bed after midnight?","I {x} go to bed after midnight."]],
     after:"These words (always, usually, never…) and this tense are today’s grammar. You use them every day, and in Part 1.1 the examiner asks about your habits all the time." },
-
-  { type:"rule", title:"The rule, simply", sub:"Read this first. Everything else today uses it.", html:`
-    <div class="box"><p class="q">When do we use the present simple?</p>
-      <div class="uses">
-        <div><strong>Habits and routines</strong><span>I drink tea every morning.</span></div>
-        <div><strong>Facts about your life</strong><span>My sister lives in Samarkand.</span></div>
-        <div><strong>How often you do things</strong><span>I sometimes cook dinner.</span></div>
-      </div></div>
-    <div class="box"><p class="q">How do we make it?</p>
-      <div class="table-wrap"><table>
-        <tr><th></th><th>I / you / we / they</th><th>he / she / it</th></tr>
-        <tr><td>✓ Positive</td><td>I <span class="verb">work</span>.</td><td>She <span class="verb">works</span>.</td></tr>
-        <tr><td>✗ Negative</td><td>I <span class="verb">don’t work</span>.</td><td>She <span class="verb">doesn’t work</span>.</td></tr>
-        <tr><td>? Question</td><td><span class="verb">Do</span> you <span class="verb">work</span>?</td><td><span class="verb">Does</span> she <span class="verb">work</span>?</td></tr>
-      </table></div>
-      <p><strong>Remember:</strong> he / she / it = add <strong>-s</strong>. But after <em>doesn’t</em> and <em>does</em>, no -s: <em>She doesn’t work.</em></p></div>
-    <div class="box"><p class="q">Spelling with he / she / it</p>
-      <div class="table-wrap"><table>
-        <tr><th>Rule</th><th>Examples</th></tr>
-        <tr><td>Most verbs: + s</td><td>work → works, read → reads</td></tr>
-        <tr><td>-ch, -sh, -s, -x, -o: + es</td><td>watch → watches, go → goes</td></tr>
-        <tr><td>consonant + y: y → ies</td><td>study → studies</td></tr>
-        <tr><td>Special</td><td>have → has</td></tr>
-      </table></div></div>
-    <div class="box"><p class="q">How often? Frequency words</p>
-      <div class="scale">
-        <div><span>always</span><i style="width:100%"></i></div>
-        <div><span>usually</span><i style="width:85%"></i></div>
-        <div><span>often</span><i style="width:65%"></i></div>
-        <div><span>sometimes</span><i style="width:45%"></i></div>
-        <div><span>rarely / hardly ever</span><i style="width:15%"></i></div>
-        <div><span>never</span><i style="width:2%"></i></div>
-      </div>
-      <p><strong>Where do they go?</strong></p>
-      <p>Before the verb: I <mark>usually</mark> walk to work.<br>After <em>am / is / are</em>: I’m <mark>always</mark> busy.</p>
-      <p><strong>Time expressions</strong> go at the end: I go to the gym <mark>twice a week</mark>. (also: every day, once a month, on weekends)</p></div>` },
-
+  { type:"rule", title:"The rule, simply", sub:"Read this first. Everything else today uses it.", html:
+    box("When do we use the present simple?", uses([["Habits and routines","I drink tea every morning."],["Facts about your life","My sister lives in Samarkand."],["How often you do things","I sometimes cook dinner."]])) +
+    box("How do we make it?", tbl(["","I / you / we / they","he / she / it"],[["✓ Positive","I <span class='verb'>work</span>.","She <span class='verb'>works</span>."],["✗ Negative","I <span class='verb'>don’t work</span>.","She <span class='verb'>doesn’t work</span>."],["? Question","<span class='verb'>Do</span> you <span class='verb'>work</span>?","<span class='verb'>Does</span> she <span class='verb'>work</span>?"]]) +
+      `<p><strong>Remember:</strong> he / she / it = add <strong>-s</strong>. But after <em>doesn’t</em> and <em>does</em>, no -s: <em>She doesn’t work.</em></p>`) +
+    box("Spelling with he / she / it", tbl(["Rule","Examples"],[["Most verbs: + s","work → works, read → reads"],["-ch, -sh, -s, -x, -o: + es","watch → watches, go → goes"],["consonant + y: y → ies","study → studies"],["Special","have → has"]])) +
+    box("How often? Frequency words", freqScale + `<p><strong>Where do they go?</strong></p><p>Before the verb: I <mark>usually</mark> walk to work.<br>After <em>am / is / are</em>: I’m <mark>always</mark> busy.</p><p><strong>Time expressions</strong> go at the end: I go to the gym <mark>twice a week</mark>. (also: every day, once a month, on weekends)</p>`) },
   { type:"mistakes", title:"Common mistakes", sub:"Students make these all the time. Learn them now, and you won’t make them in the exam.",
     items:[
       {bad:"He go to work by bus.", good:"He goes to work by bus.", why:"He / she / it needs -s."},
@@ -310,16 +289,13 @@ const CONTENT = {
       {bad:"I am usually wake up at 7.", good:"I usually wake up at 7.", why:"Don’t put am / is / are before a normal verb."},
       {bad:"I go always to the gym.", good:"I always go to the gym.", why:"The frequency word goes before the verb."},
       {bad:"Do she live near you?", good:"Does she live near you?", why:"He / she / it: use does in questions."},
-      {bad:"I every day play football.", good:"I play football every day.", why:"Time expressions go at the end."}
-    ],
+      {bad:"I every day play football.", good:"I play football every day.", why:"Time expressions go at the end."}],
     test:[
       {s:"My mother cook very well.", ok:false, why:"Wrong: My mother cooks very well."},
       {s:"We never eat fast food.", ok:true, why:"Right: never goes before the verb."},
       {s:"Does your brother works on Saturdays?", ok:false, why:"Wrong: Does your brother work…? (no -s after does)"},
       {s:"I’m always tired on Mondays.", ok:true, why:"Right: always goes after am."},
-      {s:"She is usually goes to bed late.", ok:false, why:"Wrong: She usually goes to bed late. (no is)"}
-    ]},
-
+      {s:"She is usually goes to bed late.", ok:false, why:"Wrong: She usually goes to bed late. (no is)"}]},
   { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
     chat:{ title:"A chat with your friend Malika", lines:[
       {who:"Malika", t:"Hi! What time ___ you usually finish work?", o:["do","does"], a:0},
@@ -327,18 +303,15 @@ const CONTENT = {
       {who:"Malika", t:"I want to go to the gym. My sister ___ there twice a week.", o:["go","goes"], a:1},
       {who:"You", t:"Great idea! I’m ___ free on Tuesdays.", o:["always","always am"], a:0},
       {who:"Malika", t:"Perfect. But my sister ___ like early mornings.", o:["don’t","doesn’t"], a:1},
-      {who:"You", t:"Me neither! I ___ get up before 8 on weekends 😄", o:["never","ever"], a:0}
-    ]},
-    text:{ title:"A day in Rustam’s life", intro:"Rustam is a taxi driver in Tashkent. Write the verbs in the correct form.", lines:[
+      {who:"You", t:"Me neither! I ___ get up before 8 on weekends 😄", o:["never","ever"], a:0}]},
+    text:{ title:"🚕 A day in Rustam’s life", intro:"Rustam is a taxi driver in Tashkent. Write the verbs in the correct form.", lines:[
       {t:"Rustam ___ (work) as a taxi driver.", a:["works"]},
       {t:"He ___ (start) work at 7 every morning.", a:["starts"]},
       {t:"He ___ (not / have) breakfast at home.", a:["doesn't have","does not have"]},
       {t:"He usually ___ (buy) a samsa near the station.", a:["buys"]},
       {t:"In the evening, he ___ (watch) football with his son.", a:["watches"]},
       {t:"On Sundays, he ___ (not / work).", a:["doesn't work","does not work"]},
-      {t:"___ (he / like) his job? Yes, he loves it!", a:["does he like"]}
-    ]}},
-
+      {t:"___ (he / like) his job? Yes, he loves it!", a:["does he like"]}]}},
   { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
     clock:[
       {q:"She ___ to music every evening.", o:["listen","listens"], a:1},
@@ -350,31 +323,27 @@ const CONTENT = {
       {q:"My sister ___ English twice a week.", o:["studys","studies"], a:1},
       {q:"We ___ go out on weekdays.", o:["hardly ever","ever hardly"], a:0},
       {q:"Which is correct?", o:["She doesn’t likes tea.","She doesn’t like tea."], a:1},
-      {q:"I go to the gym ___.", o:["once a week","a week once"], a:0}
-    ],
+      {q:"I go to the gym ___.", o:["once a week","a week once"], a:0}],
     jumble:["I usually walk to school","My brother is always busy","We go to the cinema once a month","She doesn’t often eat fast food"] },
-
   { type:"reallife", title:"Use it in real life", sub:"This is how you really use the present simple outside the classroom.",
     replies:[
       {who:"Your new colleague asks:", q:"“What do you usually do for lunch?”", o:["I usually bring food from home.","I am usually bring food from home.","Usually I bringing food from home."], a:0, why:"Usually + verb, no am."},
       {who:"Your doctor asks:", q:"“How often do you exercise?”", o:["I exercising three times a week.","I exercise about three times a week.","Three times week I exercises."], a:1, why:"I + verb + how often at the end."},
       {who:"At a hotel, you ask the receptionist:", q:"(You want to know the breakfast time.)", o:["What time breakfast starts?","What time does breakfast starts?","What time does breakfast start?"], a:2, why:"Does + subject + verb with no -s."},
-      {who:"Your friend asks:", q:"“Does your brother still play football?”", o:["Yes, he play every Sunday.","Yes, he plays every Sunday.","Yes, he is play every Sunday."], a:1, why:"He + plays."}
-    ],
-    planner:{ person:"Dilnoza", days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], rows:[
-      ["read before bed",[1,1,1,1,1,1,1]],
-      ["go to the gym",[1,0,1,0,1,0,0]],
-      ["cook dinner",[0,0,0,0,0,1,0]],
-      ["visit her grandparents",[0,0,0,0,0,0,1]],
-      ["watch TV",[0,0,0,0,0,0,0]]],
-      model:"Dilnoza always reads before bed. She goes to the gym three times a week, on Monday, Wednesday and Friday. She cooks dinner once a week, on Saturday. She visits her grandparents every Sunday. She never watches TV." }},
-
-  { type:"speak", title:"Exam speaking", sub:"Now use it in the exam. Answer each question for about 30 seconds and record yourself.",
+      {who:"Your friend asks:", q:"“Does your brother still play football?”", o:["Yes, he play every Sunday.","Yes, he plays every Sunday.","Yes, he is play every Sunday."], a:1, why:"He + plays."}],
+    table:{ title:"Dilnoza’s week", intro:"Look at Dilnoza’s planner. Write 3 or 4 sentences about her. Use always, often, sometimes, never, or once / twice / three times a week.",
+      headers:["","Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+      rows:[["read before bed","✓","✓","✓","✓","✓","✓","✓"],["go to the gym","✓","","✓","","✓","",""],["cook dinner","","","","","","✓",""],["visit her grandparents","","","","","","","✓"],["watch TV","","","","","","",""]],
+      placeholder:"Dilnoza always…", check:"Check before you look: did you add -s? (She reads, she goes, she watches…)",
+      model:"Dilnoza always reads before bed. She goes to the gym three times a week, on Monday, Wednesday and Friday. She cooks dinner once a week, on Saturday. She visits her grandparents every Sunday. She never watches TV." },
+    builder:{ title:"Your “About me” profile", intro:"Imagine a language exchange app. Complete your profile, then press the button.",
+      fields:[["My name is","Shirin"],["I live in","Tashkent"],["On weekdays, I usually","go to work by metro"],["In my free time, I often","read books"],["Once a week, I","visit my parents"],["I never","eat fast food"]],
+      template:"Hi! I’m {0} from {1}. On weekdays, I <mark>usually</mark> {2}. In my free time, I <mark>often</mark> {3}. <mark>Once a week</mark>, I {4}. I <mark>never</mark> {5}." }},
+  { type:"speak", title:"Exam speaking", sub:"Now use it in the exam. Answer each question and record yourself.", seconds:30,
     formula:["Answer","How often","Reason","Example"],
     example:{ q:"What do you usually do at weekends?", a:"Well, I <mark>usually</mark> spend my weekends with my family. On Saturday mornings, I <mark>often</mark> help my mum with the cooking, because it’s the only time we cook together. I <mark>rarely</mark> stay at home all day, because I get bored quickly. And on Sundays I <mark>always</mark> go to bed early, so I’m ready for the new week." },
     questions:["How do you usually spend your evenings?","How often do you use social media? Do you think it is a good habit?","What do you do when you feel stressed?"],
     starters:["I usually…","Once a week, I…","I hardly ever… because…","On weekends, I often…","Sometimes I…"] },
-
   { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
     errors:[
       {s:"My father drive to work every day.", wrong:[2], fix:"My father drives to work every day."},
@@ -382,9 +351,1125 @@ const CONTENT = {
       {s:"We go often to the park.", wrong:[2], fix:"We often go to the park."},
       {s:"He don’t have a car.", wrong:[1], fix:"He doesn’t have a car."},
       {s:"I play every day football.", wrong:[2,3], fix:"I play football every day."},
-      {s:"I usually am tired after work.", wrong:[1,2], fix:"I’m usually tired after work."}
-    ],
+      {s:"I usually am tired after work.", wrong:[1,2], fix:"I’m usually tired after work."}],
     checklist:["I used at least three frequency words.","I gave a reason with “because”.","I gave an example or a detail.","I remembered -s with he / she / it.","I spoke for about 30 seconds."] }
+],
+
+/* ---------------- DAY 2 ---------------- */
+2: [
+  { type:"poll", title:"Have you ever…?", sub:"Tap your answer. Be honest!",
+    options:["have","have never"],
+    items:[["Have you ever been abroad?","I {x} been abroad."],["Have you ever tried sushi?","I {x} tried sushi."],["Have you ever met a famous person?","I {x} met a famous person."],["Have you ever lost your phone?","I {x} lost my phone."]],
+    after:"You just used the present perfect: have + past participle. We use it for life experiences. When you add details (when? where?), you switch to the past simple. That’s today’s secret." },
+  { type:"rule", title:"The rule, simply", sub:"Two tenses, one simple question: do you say WHEN?", html:
+    box("Which tense?", uses([["Present perfect: experience, no time","I have visited Samarkand."],["Past simple: finished time","I visited Samarkand last year."],["Exam trick: start with one, continue with the other","I’ve been to Turkey. I went there in 2023."]])) +
+    box("How do we make them?", tbl(["","Present perfect","Past simple"],[["✓","I <span class='verb'>have (’ve) seen</span> it.<br>She <span class='verb'>has (’s) seen</span> it.","I <span class='verb'>saw</span> it."],["✗","I <span class='verb'>haven’t seen</span> it.<br>I’ve <span class='verb'>never seen</span> it.","I <span class='verb'>didn’t see</span> it."],["?","<span class='verb'>Have</span> you ever <span class='verb'>seen</span> it?","<span class='verb'>Did</span> you <span class='verb'>see</span> it?"]])) +
+    box("Common irregular verbs", tbl(["Verb","Past simple","Past participle"],[["be","was / were","been"],["go","went","gone / been"],["see","saw","seen"],["eat","ate","eaten"],["do","did","done"],["take","took","taken"],["meet","met","met"],["fly","flew","flown"]])) +
+    box("Time words", tbl(["Present perfect","Past simple"],[["ever, never, in my life, so far, already, just","yesterday, last week, in 2020, two days ago, when I was a child"]]) +
+      `<p><strong>been or gone?</strong> She has <mark>been</mark> to Paris (she came back). She has <mark>gone</mark> to Paris (she is there now).</p>`) },
+  { type:"mistakes", title:"Common mistakes", sub:"These mistakes are very common. Learn them now.",
+    items:[
+      {bad:"I have visited Bukhara last year.", good:"I visited Bukhara last year.", why:"Last year = finished time → past simple."},
+      {bad:"I have seen him two days ago.", good:"I saw him two days ago.", why:"Ago → past simple."},
+      {bad:"I have went to Turkey.", good:"I have been to Turkey.", why:"Have + past participle (been), not the past simple (went)."},
+      {bad:"She have never flown.", good:"She has never flown.", why:"He / she / it → has."},
+      {bad:"I never have been abroad.", good:"I have never been abroad.", why:"Never goes between have and the past participle."},
+      {bad:"When have you visited London?", good:"When did you visit London?", why:"Questions with when → past simple."}],
+    test:[
+      {s:"I’ve never seen snow in May.", ok:true, why:"Right: an experience, no time."},
+      {s:"We have watched that film yesterday.", ok:false, why:"Wrong: We watched that film yesterday."},
+      {s:"Has your brother ever been to Dubai?", ok:true, why:"Right: has + ever + been."},
+      {s:"I didn’t went to school yesterday.", ok:false, why:"Wrong: I didn’t go… (after didn’t, use the base verb)"}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"A chat with your friend Jasur", lines:[
+      {who:"Jasur", t:"Have you ever ___ to Istanbul?", o:["been","went"], a:0},
+      {who:"You", t:"Yes, I ___ there last summer!", o:["went","have been"], a:0},
+      {who:"Jasur", t:"Cool! ___ you visit the Blue Mosque?", o:["Did","Have"], a:0},
+      {who:"You", t:"Yes, it was amazing. I ___ never seen anything like it.", o:["have","did"], a:0},
+      {who:"Jasur", t:"My sister ___ never travelled abroad.", o:["has","have"], a:0},
+      {who:"You", t:"She should go! I ___ my tickets two months ago.", o:["bought","have bought"], a:0}]},
+    text:{ title:"✈️ Kamola’s travel story", intro:"Write the verbs in the present perfect or the past simple.", lines:[
+      {t:"Kamola ___ (visit) five countries in her life.", a:["has visited","'s visited"]},
+      {t:"She ___ (go) to Georgia last year.", a:["went"]},
+      {t:"She ___ (never / be) to Japan.", a:["has never been","'s never been"]},
+      {t:"In 2022, she ___ (fly) to Dubai with her family.", a:["flew"]},
+      {t:"Two years ago, she ___ (lose) her passport at the airport!", a:["lost"]},
+      {t:"She ___ (take) more than 2,000 photos so far.", a:["has taken","'s taken"]},
+      {t:"Last month, she ___ (start) a travel blog.", a:["started"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"I ___ to Samarkand twice.", o:["have been","went"], a:0},
+      {q:"She ___ her keys yesterday.", o:["lost","has lost"], a:0},
+      {q:"___ you ever eaten Korean food?", o:["Have","Did"], a:0},
+      {q:"We ___ that film last week.", o:["saw","have seen"], a:0},
+      {q:"He has never ___ in a plane.", o:["flown","flew"], a:0},
+      {q:"When ___ you start learning English?", o:["did","have"], a:0},
+      {q:"My parents ___ never been to Europe.", o:["have","has"], a:0},
+      {q:"I ___ him three days ago.", o:["met","have met"], a:0},
+      {q:"She’s ___ to the shop. She’ll be back soon.", o:["gone","been"], a:0},
+      {q:"Which is correct?", o:["I have finished school in 2020.","I finished school in 2020."], a:1}],
+    jumble:["I have never been to London","She visited her grandmother last week","Have you ever tried Korean food","We went to the mountains two years ago"] },
+  { type:"reallife", title:"Use it in real life", sub:"Talking about your experiences in everyday situations.",
+    replies:[
+      {who:"A new friend asks:", q:"“Have you ever been to Samarkand?”", o:["Yes, I have. I went there last spring.","Yes, I have been there last spring.","Yes, I go there last spring."], a:0, why:"Present perfect for the experience, past simple for when."},
+      {who:"At a job interview:", q:"“Have you ever worked with children?”", o:["Yes, I did worked at a summer camp.","Yes, I have. I worked at a summer camp in 2024.","Yes, I have work at a summer camp."], a:1, why:"Have + past participle, then past simple with in 2024."},
+      {who:"Your friend asks about the weekend:", q:"“What did you do on Saturday?”", o:["I have watched a film.","I watched a film with my cousins.","I watch a film."], a:1, why:"On Saturday = finished time → past simple."},
+      {who:"At the doctor’s:", q:"“Have you ever had this problem before?”", o:["No, I haven’t. This is the first time.","No, I didn’t have. This is the first time.","No, I haven’t had never."], a:0, why:"Short answer: No, I haven’t."}],
+    table:{ title:"Bobur’s experiences", intro:"Write about Bobur. Use the present perfect for the experience and the past simple for when.",
+      headers:["Experience","Ever?","When?"],
+      rows:[["fly in a plane","✓","2019, to Moscow"],["climb a mountain","✓","last summer, Chimgan"],["see the sea","✗","–"],["meet a famous footballer","✓","two years ago"],["cook plov","✗","–"]],
+      placeholder:"Bobur has flown…", check:"Check: has + past participle for experiences, past simple when you say when.",
+      model:"Bobur has flown in a plane. He flew to Moscow in 2019. He has climbed a mountain: he climbed Chimgan last summer. He has never seen the sea. He has met a famous footballer. He met him two years ago. He has never cooked plov." },
+    builder:{ title:"Your experience card", intro:"Complete the sentences about your life, then press the button.",
+      fields:[["I have never","been to Japan"],["The best place I have ever visited is","Bukhara"],["I went there","two years ago with my family"],["The most delicious food I have ever eaten is","my grandmother’s plov"]],
+      template:"I <mark>have never</mark> {0}, but I really want to. The best place I <mark>have ever visited</mark> is {1}. I <mark>went</mark> there {2}. The most delicious food I <mark>have ever eaten</mark> is {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 1.1 questions about your experiences. Record yourself.", seconds:30,
+    formula:["Yes / No + present perfect","When? (past simple)","What happened","How you felt"],
+    example:{ q:"Have you ever travelled to another city?", a:"Yes, I <mark>have</mark>. I<mark>’ve been</mark> to Samarkand three times. The last time, I <mark>went</mark> there with my classmates in spring. We <mark>visited</mark> the Registan and <mark>took</mark> lots of photos. It <mark>was</mark> one of the best trips I<mark>’ve ever had</mark>." },
+    questions:["Have you ever travelled to another country or city? Tell me about it.","What is the most interesting thing you have ever done?","Have you ever learned something new outside school? What was it?"],
+    starters:["I’ve been to…","I’ve never…, but…","The last time I… was…","It was the best… I’ve ever…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"I have seen this film last week.", wrong:[1,2], fix:"I saw this film last week."},
+      {s:"She has went to Dubai twice.", wrong:[2], fix:"She has been to Dubai twice."},
+      {s:"Did you ever been to Bukhara?", wrong:[0,3], fix:"Have you ever been to Bukhara?"},
+      {s:"We have never ate sushi.", wrong:[3], fix:"We have never eaten sushi."},
+      {s:"He have visited Paris twice.", wrong:[1], fix:"He has visited Paris twice."},
+      {s:"When have you finished school?", wrong:[1], fix:"When did you finish school?"}],
+    checklist:["I used have / has + past participle for experiences.","I used the past simple when I said when.","I added details: where, who with, how it was.","I spoke for about 30 seconds."] }
+],
+
+/* ---------------- DAY 3 ---------------- */
+3: [
+  { type:"poll", title:"When you were a child…", sub:"Tap your answer. Think about when you were about 8 years old.",
+    options:["used to","didn’t use to"],
+    items:[["Did you play outside a lot?","I {x} play outside a lot."],["Did you watch cartoons every morning?","I {x} watch cartoons every morning."],["Did you like vegetables?","I {x} like vegetables."],["Did you have long hair?","I {x} have long hair."]],
+    after:"Used to = something that was true in the past, but usually isn’t now. It’s perfect for “How has your life changed?” questions in Part 1.1." },
+  { type:"rule", title:"The rule, simply", sub:"Talking about the past, and how things have changed.", html:
+    box("When do we use used to?", uses([["Past habits","I used to walk to school."],["Past states","I used to have long hair."],["Not true now","I used to hate English. Now I love it!"]])) +
+    box("How do we make it?", tbl(["","All persons (I, you, he, she…)"],[["✓ Positive","I <span class='verb'>used to play</span> football."],["✗ Negative","I <span class='verb'>didn’t use to play</span> football. (no -d!)"],["? Question","<span class='verb'>Did</span> you <span class='verb'>use to play</span> football?"]]) +
+      `<p>After <em>used to</em>, always use the base verb: used to <strong>play</strong>, used to <strong>live</strong>.</p>`) +
+    box("Would: for repeated past actions", `<p>We can use <em>would</em> for things we did again and again:</p><p><em>Every summer, we <mark>would</mark> go to my grandmother’s village.</em></p><p>But not for states (have, be, like, live, know): ✗ <em>I would have long hair.</em> ✓ <em>I used to have long hair.</em></p>`) +
+    box("Compare with now", `<p><em>I used to…, but now I…</em> / <em>These days, I…</em> / <em>Nowadays…</em></p>` + tip("start with used to, then continue with would. It sounds natural and advanced: “I used to love summer. We would swim in the river every day…”")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Learn these now, and your answers will sound much better.",
+    items:[
+      {bad:"I use to play football.", good:"I used to play football.", why:"Positive sentences: used (with -d)."},
+      {bad:"I didn’t used to like coffee.", good:"I didn’t use to like coffee.", why:"After didn’t: use (no -d)."},
+      {bad:"I used to playing outside.", good:"I used to play outside.", why:"Used to + base verb."},
+      {bad:"I would have a bike when I was ten.", good:"I used to have a bike when I was ten.", why:"Would doesn’t work with states like have, be, like, live."},
+      {bad:"I am used to go to bed early when I was a child.", good:"I used to go to bed early when I was a child.", why:"Don’t add am / is. (“Be used to” means something different.)"},
+      {bad:"Did you used to live here?", good:"Did you use to live here?", why:"After did: use (no -d)."}],
+    test:[
+      {s:"My grandfather used to work in a factory.", ok:true, why:"Right: used to + work."},
+      {s:"We would live in a small flat.", ok:false, why:"Wrong: We used to live in a small flat. (live is a state)"},
+      {s:"She didn’t use to wear glasses.", ok:true, why:"Right: didn’t use to."},
+      {s:"I used to swimming every day.", ok:false, why:"Wrong: I used to swim every day."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Looking at old photos with your aunt", lines:[
+      {who:"Aunt", t:"Look at this photo! You ___ have such curly hair!", o:["used to","use to"], a:0},
+      {who:"You", t:"I know! And I used ___ wear those big glasses.", o:["to","to be"], a:0},
+      {who:"Aunt", t:"Every Sunday, we ___ go to the park together.", o:["would","use"], a:0},
+      {who:"You", t:"Yes! And you ___ buy me ice cream.", o:["would always","always would"], a:0},
+      {who:"Aunt", t:"You ___ like vegetables, remember?", o:["didn’t use to","didn’t used to"], a:0},
+      {who:"You", t:"Haha, true. But now I ___ them!", o:["love","used to love"], a:0}]},
+    text:{ title:"🏙️ Grandpa Akmal remembers", intro:"How has Tashkent changed? Write used to, didn’t use to or would + verb.", lines:[
+      {t:"There ___ (not / be) many tall buildings.", a:["didn't use to be","did not use to be"]},
+      {t:"People ___ (walk) or take the bus everywhere.", a:["used to walk"]},
+      {t:"Every evening, neighbours ___ (sit) outside and talk.", a:["would sit","used to sit"]},
+      {t:"My family ___ (live) in a house with a big garden.", a:["used to live"]},
+      {t:"We ___ (not / have) a TV until 1975.", a:["didn't use to have","did not use to have"]},
+      {t:"On holidays, my mother ___ (cook) plov for the whole street.", a:["would cook","used to cook"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"I ___ to school by bus.", o:["used to go","used to going"], a:0},
+      {q:"She ___ like cats, but now she has three!", o:["didn’t use to","didn’t used to"], a:0},
+      {q:"___ you use to play football?", o:["Did","Were"], a:0},
+      {q:"We ___ live in Namangan.", o:["used to","would"], a:0},
+      {q:"Every summer, we ___ visit our cousins.", o:["would","use to"], a:0},
+      {q:"My dad ___ smoke, but he stopped.", o:["used to","is used to"], a:0},
+      {q:"Which is correct?", o:["I used to have long hair.","I would have long hair."], a:0},
+      {q:"Which is correct?", o:["Did you use to walk to school?","Did you used to walk to school?"], a:0},
+      {q:"There ___ be a cinema here.", o:["used to","would"], a:0}],
+    jumble:["I used to play in the street","We would visit my grandparents every summer","She didn’t use to like tea","Did you use to have a pet"] },
+  { type:"reallife", title:"Use it in real life", sub:"Talking about change in everyday conversations.",
+    replies:[
+      {who:"A classmate from school says:", q:"“You’ve changed so much!”", o:["Yes, I used to be very shy, but now I’m more confident.","Yes, I use to be shy.","Yes, I would be very shy."], a:0, why:"Used to + be for a past state."},
+      {who:"Your new neighbour asks:", q:"“Have you always lived here?”", o:["No, I used to live in Fergana.","No, I would live in Fergana.","No, I used to living in Fergana."], a:0, why:"Live is a state → used to, not would."},
+      {who:"A friend asks:", q:"“Did you use to like school?”", o:["Not really, I didn’t used to like maths.","Not really. I didn’t use to like maths, but now I love it.","Not really, I wouldn’t like maths."], a:1, why:"Didn’t use to (no -d)."}],
+    table:{ title:"Malika: then and now", intro:"Write about how Malika’s life has changed. Use used to, would and the present simple.",
+      headers:["","10 years ago","Now"],
+      rows:[["phone","a simple button phone","a smartphone"],["transport","walk to school","drive a car"],["free time","play outside with friends","watch series online"],["breakfast","have porridge every day","just drink coffee"]],
+      placeholder:"Malika used to…", check:"Check: used to + base verb, and present simple for now (she drives, she watches).",
+      model:"Malika used to have a simple button phone, but now she has a smartphone. She used to walk to school, but now she drives a car. In her free time, she would play outside with friends, but these days she watches series online. She used to have porridge every day, but now she just drinks coffee." },
+    builder:{ title:"Me: then and now", intro:"Complete the sentences about your childhood, then press the button.",
+      fields:[["When I was a child, I used to","be very shy"],["Every weekend, I would","visit my grandparents"],["I didn’t use to","like vegetables"],["But now I","love salads"]],
+      template:"When I was a child, I <mark>used to</mark> {0}. Every weekend, I <mark>would</mark> {1}. I <mark>didn’t use to</mark> {2}, but now I {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 1.1 questions about change. Record yourself.", seconds:30,
+    formula:["Then: used to","Habits: would","Now: present simple","Why it changed"],
+    example:{ q:"How has your free time changed since you were a child?", a:"It has changed a lot. When I was a child, I <mark>used to</mark> spend all my free time outside. Every evening, my friends and I <mark>would</mark> play football until it got dark. I <mark>didn’t use to</mark> have a phone, so we talked face to face. But now I’m always busy with work, so I usually relax at home and watch videos." },
+    questions:["How has your town or city changed since you were a child?","What did you use to do in your free time when you were younger?","Is there any food you didn’t use to like but like now?"],
+    starters:["When I was a child, I used to…","Every summer, we would…","I didn’t use to…, but now…","These days, I…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"I use to live in Andijan.", wrong:[1], fix:"I used to live in Andijan."},
+      {s:"She didn’t used to drink coffee.", wrong:[2], fix:"She didn’t use to drink coffee."},
+      {s:"We used to playing chess.", wrong:[3], fix:"We used to play chess."},
+      {s:"I would have a cat when I was small.", wrong:[1], fix:"I used to have a cat when I was small."},
+      {s:"Did you used to wear a uniform?", wrong:[2], fix:"Did you use to wear a uniform?"}],
+    checklist:["I used “used to” for the past.","I used “would” for repeated actions (not for states).","I compared the past with now.","I spoke for about 30 seconds."] }
+],
+
+/* ---------------- DAY 4 ---------------- */
+4: [
+  { type:"poll", title:"Which is better?", sub:"Tap your opinion.",
+    options:["better","worse"],
+    items:[["Online lessons or lessons in class?","Online lessons are {x} than lessons in class."],["Summer or winter?","Summer is {x} than winter."],["Tea or coffee?","Tea is {x} than coffee."],["City life or village life?","City life is {x} than village life."]],
+    after:"Better and worse are comparatives. In Part 1.2 you compare two pictures, so you need comparatives all the time." },
+  { type:"rule", title:"The rule, simply", sub:"Comparing two or more things.", html:
+    box("When do we use them?", uses([["Compare two things (comparative)","The city is busier than the village."],["The top of a group (superlative)","Summer is the best season."],["The same (as … as)","The metro is as fast as a taxi."]])) +
+    box("How do we make them?", tbl(["Adjective","Comparative","Superlative"],[["cheap (short)","cheap<strong>er</strong> than","the cheap<strong>est</strong>"],["large (ends in -e)","larg<strong>er</strong>","the larg<strong>est</strong>"],["big (short, vowel + consonant)","bi<strong>gg</strong>er","the bi<strong>gg</strong>est"],["busy (ends in -y)","bus<strong>ier</strong>","the bus<strong>iest</strong>"],["expensive (long)","<strong>more</strong> expensive","the <strong>most</strong> expensive"],["good / bad / far","better / worse / further","the best / the worst / the furthest"]])) +
+    box("Useful for pictures", `<p><strong>Much / a lot / a bit</strong> + comparative: <em>Picture A is <mark>much brighter</mark> than picture B.</em></p><p><strong>Not as … as:</strong> <em>The village <mark>isn’t as noisy as</mark> the city.</em></p><p><strong>Whereas / while:</strong> <em>In picture A people look relaxed, <mark>whereas</mark> in picture B they look stressed.</em></p>` + tip("in Part 1.2, describe both pictures briefly, give 2–3 differences with comparatives, then your opinion.")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Very common in Part 1.2. Learn them now.",
+    items:[
+      {bad:"The city is more big than the village.", good:"The city is bigger than the village.", why:"Short adjectives: -er, not more."},
+      {bad:"This phone is more cheaper.", good:"This phone is cheaper.", why:"Never use more and -er together."},
+      {bad:"She is taller then me.", good:"She is taller than me.", why:"Than (for comparing), not then (time)."},
+      {bad:"It’s the most good restaurant.", good:"It’s the best restaurant.", why:"Good → better → the best."},
+      {bad:"This is the expensivest hotel.", good:"This is the most expensive hotel.", why:"Long adjectives: the most…"},
+      {bad:"The village is quiet than the city.", good:"The village is quieter than the city.", why:"Don’t forget -er before than."}],
+    test:[
+      {s:"Tashkent is bigger than Samarkand.", ok:true, why:"Right: big → bigger."},
+      {s:"My brother is more young than me.", ok:false, why:"Wrong: My brother is younger than me."},
+      {s:"This is the worst day of my life!", ok:true, why:"Right: bad → the worst."},
+      {s:"The metro is as fast than a taxi.", ok:false, why:"Wrong: as fast as a taxi."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Choosing a café with Nodira", lines:[
+      {who:"Nodira", t:"Let’s go to Café Lola. It’s ___ than Café Bahor.", o:["cheaper","more cheap"], a:0},
+      {who:"You", t:"But Café Bahor is ___.", o:["more comfortable","comfortabler"], a:0},
+      {who:"Nodira", t:"Hmm, Lola has the ___ desserts in the city!", o:["best","most good"], a:0},
+      {who:"You", t:"True, but it’s much ___ at the weekend.", o:["busier","more busy"], a:0},
+      {who:"Nodira", t:"OK, Bahor isn’t ___ noisy as Lola.", o:["as","so than"], a:0},
+      {who:"You", t:"Great, Bahor it is! It’s ___ to my house too.", o:["closer","more close"], a:0}]},
+    text:{ title:"🏠 Two flats", intro:"You are choosing a flat. Write the correct form of the adjective.", lines:[
+      {t:"Flat A is ___ (big) than Flat B.", a:["bigger"]},
+      {t:"Flat B is ___ (modern) than Flat A.", a:["more modern"]},
+      {t:"Flat A is the ___ (cheap) flat on the website.", a:["cheapest"]},
+      {t:"Flat B is ___ (close) to the metro.", a:["closer"]},
+      {t:"The street near Flat A is ___ (noisy) than the street near Flat B.", a:["noisier"]},
+      {t:"For me, Flat B is ___ (good) than Flat A.", a:["better"]},
+      {t:"Flat A isn’t ___ (bright) as Flat B.", a:["as bright"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"A plane is ___ than a train.", o:["faster","more fast"], a:0},
+      {q:"This is the ___ book I’ve ever read.", o:["most interesting","interestingest"], a:0},
+      {q:"My sister is ___ than me.", o:["younger","more young"], a:0},
+      {q:"Today is ___ than yesterday.", o:["hotter","hoter"], a:0},
+      {q:"Which is correct?", o:["She is the best student.","She is the most good student."], a:0},
+      {q:"The village is ___ than the city.", o:["quieter","more quieter"], a:0},
+      {q:"This test is ___ than the last one.", o:["easier","easyer"], a:0},
+      {q:"The weather today is ___ than yesterday.", o:["worse","badder"], a:0},
+      {q:"A taxi isn’t as cheap ___ the metro.", o:["as","than"], a:0},
+      {q:"Picture A looks much ___ than picture B.", o:["happier","more happy"], a:0}],
+    jumble:["The city is much busier than the village","This is the best café in town","The metro isn’t as expensive as a taxi","Picture A is brighter than picture B"] },
+  { type:"reallife", title:"Use it in real life", sub:"Comparing things when you shop, travel and give advice.",
+    replies:[
+      {who:"In a shop, the seller asks:", q:"“Do you want the blue one or the black one?”", o:["The black one, please. It’s more elegant.","The black one. It’s more elegantier.","The black one. It’s the more elegant."], a:0, why:"Long adjective: more elegant."},
+      {who:"Your friend asks:", q:"“Which is better for travelling, the train or the bus?”", o:["The train. It’s faster and more comfortable.","The train. It’s more fast and comfortabler.","The train. It’s fastest."], a:0, why:"Fast → faster; comfortable → more comfortable."},
+      {who:"A tourist asks you:", q:"“What’s the best place to eat plov here?”", o:["I think the Plov Centre is the best.","I think the Plov Centre is the most good.","I think the Plov Centre is more best."], a:0, why:"Good → the best."}],
+    table:{ title:"Compare two phones", intro:"Write 4 or 5 sentences comparing the phones. Which would you buy?",
+      headers:["","Phone A","Phone B"],
+      rows:[["price","$300","$700"],["camera","good","excellent"],["battery","2 days","1 day"],["weight","200 g","170 g"],["screen","6.1 inches","6.7 inches"]],
+      placeholder:"Phone A is cheaper…", check:"Check: -er for short adjectives, more for long ones, and than after them.",
+      model:"Phone A is much cheaper than Phone B. Phone B has a better camera. Phone A’s battery lasts longer than Phone B’s. Phone B is lighter, and its screen is bigger. I would buy Phone A, because it’s cheaper and the battery is better." },
+    builder:{ title:"My city vs another city", intro:"Compare your city with another city you know.",
+      fields:[["My city is","Tashkent"],["Another city I know is","Bukhara"],["My city is ___ than that city","bigger and busier"],["But that city is","more peaceful"],["The best thing about my city is","its parks"]],
+      template:"{0} is <mark>{2}</mark> than {1}. But {1} is <mark>{3}</mark>. <mark>The best</mark> thing about {0} is {4}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 1.2: compare two pictures. Imagine the pictures, then record yourself.", seconds:45,
+    formula:["Describe both pictures","2–3 differences","Your opinion + reason"],
+    example:{ q:"Picture A: people shopping in a big supermarket. Picture B: people shopping at a traditional bazaar. Compare the pictures.", a:"In picture A, people are shopping in a supermarket, whereas in picture B they’re at a traditional bazaar. The supermarket looks <mark>cleaner</mark> and <mark>more modern</mark>, but the bazaar looks <mark>much livelier</mark>. I think the food at the bazaar is <mark>fresher</mark>, and it’s often <mark>cheaper</mark> too. Personally, I prefer the bazaar, because it’s <mark>the most interesting</mark> place to shop." },
+    questions:["Picture A: a family eating dinner together at home. Picture B: two friends eating burgers in a fast-food café. Compare the pictures. Which meal do you prefer?","Picture A: a student studying in a library. Picture B: a student studying online at home. Compare the pictures. Which is better for you?","Picture A: a busy city street. Picture B: a quiet village. Compare the pictures. Where would you prefer to live?"],
+    starters:["In picture A…, whereas in picture B…","…looks much … than…","…isn’t as … as…","Personally, I think … is the best, because…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"The city is more noisy than the village.", wrong:[3,4], fix:"The city is noisier than the village."},
+      {s:"Picture B is bigger then picture A.", wrong:[4], fix:"Picture B is bigger than picture A."},
+      {s:"She is the most good teacher.", wrong:[3,4], fix:"She is the best teacher."},
+      {s:"This bag is more cheaper.", wrong:[3], fix:"This bag is cheaper."},
+      {s:"The bus isn’t as fast than the train.", wrong:[5], fix:"The bus isn’t as fast as the train."}],
+    checklist:["I described both pictures.","I used at least three comparatives (bigger, more…).","I used than (not then).","I gave my opinion with a reason.","I spoke for about 45 seconds."] }
+],
+
+/* ---------------- DAY 5 ---------------- */
+5: [
+  { type:"poll", title:"Right now…", sub:"Tap your answer. What’s happening at this moment?",
+    options:["am","am not"],
+    items:[["Are you studying at home right now?","I {x} studying at home right now."],["Are you drinking tea?","I {x} drinking tea."],["Are you wearing a jumper?","I {x} wearing a jumper."],["Are you listening to music?","I {x} listening to music."]],
+    after:"That’s the present continuous: am / is / are + -ing. We use it for what is happening now, and it’s the best tense for describing pictures in Part 1.2." },
+  { type:"rule", title:"The rule, simply", sub:"Describing what is happening and what you can see.", html:
+    box("When do we use it?", uses([["Happening now","I’m reading this lesson."],["Describing a picture","A man is riding a bike."],["What you can see: there is / there are","There is a dog. There are two children."]])) +
+    box("How do we make it?", tbl(["","✓","✗","?"],[["I","I <span class='verb'>am (’m) working</span>","I’m <span class='verb'>not working</span>","<span class='verb'>Am</span> I <span class='verb'>working</span>?"],["he / she / it","She <span class='verb'>is (’s) working</span>","She <span class='verb'>isn’t working</span>","<span class='verb'>Is</span> she <span class='verb'>working</span>?"],["you / we / they","They <span class='verb'>are (’re) working</span>","They <span class='verb'>aren’t working</span>","<span class='verb'>Are</span> they <span class='verb'>working</span>?"]]) +
+      `<p><strong>Spelling:</strong> read → reading, make → making (drop -e), sit → sitting, run → running (double the letter).</p>`) +
+    box("There is / there are", `<p><mark>There is</mark> + one thing: <em>There is a tree.</em><br><mark>There are</mark> + many things: <em>There are some people.</em><br>Negative: <em>There isn’t a car. There aren’t any people.</em></p>`) +
+    box("Picture language", `<p><em>in the foreground, in the background, on the left, on the right, in the middle</em><br><em>He seems…, It looks like…</em></p><p><strong>Careful:</strong> state verbs don’t use -ing: ✗ I am knowing → ✓ I know (also: like, want, need, believe).</p>`) },
+  { type:"mistakes", title:"Common mistakes", sub:"These mistakes are very common when describing pictures.",
+    items:[
+      {bad:"The woman cooking dinner.", good:"The woman is cooking dinner.", why:"Don’t forget is / are."},
+      {bad:"There is three people.", good:"There are three people.", why:"Plural → there are."},
+      {bad:"The children are siting on a bench.", good:"The children are sitting on a bench.", why:"Sit → sitting (double t)."},
+      {bad:"They are wanting to go home.", good:"They want to go home.", why:"Want is a state verb: no -ing."},
+      {bad:"In the picture, a man rides a bike.", good:"In the picture, a man is riding a bike.", why:"For pictures, use the present continuous."},
+      {bad:"There are a car on the left.", good:"There is a car on the left.", why:"One thing → there is."}],
+    test:[
+      {s:"There are some trees in the background.", ok:true, why:"Right: plural → there are."},
+      {s:"The boy is smile.", ok:false, why:"Wrong: The boy is smiling."},
+      {s:"I am knowing the answer.", ok:false, why:"Wrong: I know the answer."},
+      {s:"On the right, two women are talking.", ok:true, why:"Right: are + talking."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"A video call with your sister Laylo", lines:[
+      {who:"Laylo", t:"Hi! What ___ you doing?", o:["are","do"], a:0},
+      {who:"You", t:"I’m ___ dinner. Plov!", o:["making","makeing"], a:0},
+      {who:"Laylo", t:"Yum! ___ Mum helping you?", o:["Is","Does"], a:0},
+      {who:"You", t:"No, she ___ TV in the living room.", o:["is watching","watching"], a:0},
+      {who:"Laylo", t:"And the kids? ___ a lot of noise there!", o:["There’s","There are"], a:0},
+      {who:"You", t:"Yes, they ___ with the cat 😄", o:["are playing","is playing"], a:0}]},
+    text:{ title:"🌳 A park on Sunday", intro:"Describe the picture. Write the present continuous or there is / there are.", lines:[
+      {t:"In the middle, ___ (there / be) a big fountain.", a:["there is","there's"]},
+      {t:"Two children ___ (run) around it.", a:["are running"]},
+      {t:"On the left, an old man ___ (sit) on a bench.", a:["is sitting"]},
+      {t:"He ___ (read) a newspaper.", a:["is reading"]},
+      {t:"In the background, ___ (there / be) lots of people.", a:["there are"]},
+      {t:"A young woman ___ (not / look) at her phone. She’s enjoying the sun.", a:["isn't looking","is not looking"]},
+      {t:"It ___ (seem) like a perfect day.", a:["seems"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"Look! It ___.", o:["is raining","rains"], a:0},
+      {q:"___ three cats in the picture.", o:["There are","There is"], a:0},
+      {q:"The man ___ a red jacket.", o:["is wearing","wearing"], a:0},
+      {q:"They are ___ in the sea.", o:["swimming","swiming"], a:0},
+      {q:"Which is correct?", o:["I know the answer.","I am knowing the answer."], a:0},
+      {q:"___ a big tree on the right.", o:["There is","There are"], a:0},
+      {q:"What ___ she doing?", o:["is","does"], a:0},
+      {q:"The kids ___ watching TV. They’re playing.", o:["aren’t","don’t"], a:0},
+      {q:"She is ___ a cake.", o:["making","makeing"], a:0},
+      {q:"In the ___, there are mountains.", o:["background","back"], a:0}],
+    jumble:["There are two children in the picture","A woman is sitting on the left","The people are smiling and talking","In the background there is a big building"] },
+  { type:"reallife", title:"Use it in real life", sub:"Saying what’s happening and where things are.",
+    replies:[
+      {who:"Your mum calls and asks:", q:"“Where are you? What are you doing?”", o:["I’m at the café. I’m waiting for Malika.","I’m at the café. I wait for Malika now.","I at the café. I waiting for Malika."], a:0, why:"Happening now → am + -ing."},
+      {who:"A tourist asks on the street:", q:"“Is there a pharmacy near here?”", o:["Yes, there’s one on the left, next to the bank.","Yes, there are one on the left.","Yes, it is one on the left."], a:0, why:"One thing → there is (there’s)."},
+      {who:"Your friend sends a photo and asks:", q:"“Guess what I’m doing!”", o:["You’re having a picnic in the mountains!","You have a picnic in the mountains!","You having a picnic!"], a:0, why:"You + are + -ing."}],
+    table:{ title:"Describe the picture", intro:"Use the notes to write 4 or 5 sentences describing the picture.",
+      headers:["Where","What can you see?"],
+      rows:[["in the middle","a family / have a picnic"],["on the left","a dog / run after a ball"],["on the right","an old couple / walk"],["in the background","mountains and some trees"],["in the foreground","a basket of fruit"]],
+      placeholder:"In the middle, there is…", check:"Check: is / are + -ing, there is (one) and there are (many).",
+      model:"In the middle, there is a family. They are having a picnic. On the left, a dog is running after a ball. On the right, an old couple is walking. In the background, there are mountains and some trees. In the foreground, there is a basket of fruit. It looks like a happy day." },
+    builder:{ title:"Describe this moment", intro:"Describe what’s happening around you right now.",
+      fields:[["Right now, I am","sitting at my desk"],["Around me, there is","a cup of tea"],["and there are","some books"],["Outside, people are","walking to work"],["The weather is","sunny"]],
+      template:"Right now, I <mark>am</mark> {0}. Around me, <mark>there is</mark> {1} and <mark>there are</mark> {2}. Outside, people <mark>are</mark> {3}. The weather is {4}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 1.2: describe and compare two pictures. Imagine them, then record yourself.", seconds:45,
+    formula:["Where & who","What they’re doing","How they seem","Compare + opinion"],
+    example:{ q:"Picture A: a family cooking together in a kitchen. Picture B: a man eating fast food alone in his car. Describe and compare the pictures.", a:"In picture A, <mark>there is</mark> a family in a kitchen. The mother <mark>is cutting</mark> vegetables and the children <mark>are helping</mark> her. They look happy and relaxed. In picture B, a man <mark>is eating</mark> a burger in his car. He <mark>is sitting</mark> alone and he seems busy and tired. I think the family in picture A is having a healthier and happier meal." },
+    questions:["Picture A: children playing football in a park. Picture B: a child playing a video game at home. Describe and compare the pictures.","Picture A: a woman working in a busy office. Picture B: a man working on a laptop at the beach. Describe and compare the pictures.","Picture A: people waiting at a crowded bus stop. Picture B: a man riding a bike to work. Describe and compare the pictures."],
+    starters:["In picture A, there is / there are…","On the left, … is …ing","He / She seems…","It looks like…","whereas in picture B…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"The girl reading a book.", wrong:[2], fix:"The girl is reading a book."},
+      {s:"There is many people in the street.", wrong:[1], fix:"There are many people in the street."},
+      {s:"The boys are runing in the park.", wrong:[3], fix:"The boys are running in the park."},
+      {s:"In the picture, a woman cooks dinner.", wrong:[5], fix:"In the picture, a woman is cooking dinner."},
+      {s:"I am liking this picture.", wrong:[1,2], fix:"I like this picture."}],
+    checklist:["I said where things are (on the left, in the background…).","I used am / is / are + -ing.","I used there is / there are.","I said how the people seem.","I spoke for about 45 seconds."] }
+],
+/* ---------------- DAY 6 ---------------- */
+6: [
+  { type:"poll", title:"Make a guess", sub:"Read each situation and choose how sure you are.",
+    options:["must","might","can’t"],
+    items:[["A man is wearing a suit and holding a briefcase. Is he going to work?","He {x} be going to work."],["A woman is laughing on the phone. Is she talking to a friend?","She {x} be talking to a friend."],["A boy is wearing shorts in the snow. Is he warm?","He {x} be warm."],["Someone is carrying flowers and a cake. Is it a birthday?","It {x} be a birthday."]],
+    after:"Must, might and can’t help you guess. In Part 1.2 you don’t know what is really happening in the pictures, so you guess. Examiners love this!" },
+  { type:"rule", title:"The rule, simply", sub:"How to guess when you’re not sure.", html:
+    box("How sure are you?", uses([["must = I’m almost sure it’s true","She must be tired. She’s yawning."],["might / may / could = maybe","They might be friends."],["can’t = I’m almost sure it’s NOT true","He can’t be cold. He’s wearing a coat."]])) +
+    box("How do we make it?", tbl(["","Form","Example"],[["About a state","modal + be","He <span class='verb'>must be</span> rich."],["About an action now","modal + be + -ing","She <span class='verb'>might be waiting</span> for someone."],["About a habit","modal + verb","They <span class='verb'>must live</span> nearby."]]) +
+      `<p>No <em>to</em> after modals: <em>must be</em>, not <em>must to be</em>.</p>`) +
+    box("The scale", `<div class="scale"><div><span>must</span><i style="width:95%"></i></div><div><span>might / may / could</span><i style="width:50%"></i></div><div><span>can’t</span><i style="width:5%"></i></div></div><p><strong>Careful:</strong> the opposite of <em>must</em> is <em>can’t</em>, not <em>mustn’t</em> (mustn’t means “it’s not allowed”).</p>`) +
+    box("More guessing phrases", `<p><em>It looks like…, He seems to be…, Perhaps…, I’m not sure, but…, Judging by her clothes, I’d say…</em></p>` + tip("always give a reason for your guess: “She must be a doctor, because she’s wearing a white coat.”")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Learn these, and your guesses will sound natural.",
+    items:[
+      {bad:"He must to be rich.", good:"He must be rich.", why:"No to after modals."},
+      {bad:"She mustn’t be at home. The lights are off.", good:"She can’t be at home. The lights are off.", why:"A negative guess = can’t."},
+      {bad:"They might are friends.", good:"They might be friends.", why:"Modal + be (not are / is)."},
+      {bad:"He must be work in an office.", good:"He must work in an office.", why:"Modal + verb, or modal + be + -ing. Not be + verb."},
+      {bad:"Maybe she might be a teacher.", good:"She might be a teacher.", why:"Use maybe OR might, not both."},
+      {bad:"It can be raining.", good:"It might be raining.", why:"For guesses about now, use might / may / could, not can."}],
+    test:[
+      {s:"She must be a doctor. She’s wearing a white coat.", ok:true, why:"Right: a strong guess with a reason."},
+      {s:"He can’t be hungry. He’s just eaten a big lunch.", ok:true, why:"Right: can’t for a negative guess."},
+      {s:"They might to be on holiday.", ok:false, why:"Wrong: They might be on holiday."},
+      {s:"It mustn’t be cold. Everyone is wearing T-shirts.", ok:false, why:"Wrong: It can’t be cold."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Looking at a family photo with Sardor", lines:[
+      {who:"Sardor", t:"Who’s the man next to your dad? He ___ be a friend.", o:["might","mustn’t"], a:0},
+      {who:"You", t:"He ___ be a friend. Look, they have the same face!", o:["can’t","mustn’t"], a:0},
+      {who:"Sardor", t:"Ah, he ___ be your uncle then!", o:["must","can"], a:0},
+      {who:"You", t:"Yes! And the woman ___ be his wife, but I’ve never met her.", o:["might","must"], a:0},
+      {who:"Sardor", t:"There’s snow in the photo. It ___ be winter.", o:["must","can’t"], a:0},
+      {who:"You", t:"No, it ___ be winter. They’re wearing T-shirts! It’s the mountains in spring.", o:["can’t","mustn’t"], a:0}]},
+    text:{ title:"👜 The mystery bag", intro:"You found a bag in a café. Inside: a plane ticket to Istanbul, a camera, a student card and a children’s book. Write must, might or can’t + verb.", lines:[
+      {t:"The owner ___ (be) a traveller. There’s a plane ticket!", a:["must be"]},
+      {t:"The owner ___ (be) very old. There’s a student card.", a:["can't be","cannot be"]},
+      {t:"He or she ___ (like) photography.", a:["must like","might like","may like","could like"]},
+      {t:"The book ___ (be) a present for a child.", a:["might be","may be","could be"]},
+      {t:"The owner ___ (be) very worried now!", a:["must be"]},
+      {t:"Or perhaps they ___ (not / know) yet that the bag is lost.", a:["might not know","may not know"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"She’s yawning. She ___ be tired.", o:["must","can’t"], a:0},
+      {q:"He’s in a T-shirt in the snow. He ___ be warm.", o:["can’t","must"], a:0},
+      {q:"I’m not sure. They ___ be sisters.", o:["might","must"], a:0},
+      {q:"Which is correct?", o:["He must be rich.","He must to be rich."], a:0},
+      {q:"The lights are off. They ___ be at home.", o:["can’t","mustn’t"], a:0},
+      {q:"She ___ be waiting for a bus.", o:["might","might to"], a:0},
+      {q:"It ___ be raining. Take an umbrella just in case.", o:["could","can"], a:0},
+      {q:"Which is correct?", o:["They may be students.","They may are students."], a:0},
+      {q:"He’s got a big smile. He ___ have good news.", o:["must","can’t"], a:0}],
+    jumble:["She must be very happy","They might be on holiday","He can’t be a student","It looks like they are waiting for someone"] },
+  { type:"reallife", title:"Use it in real life", sub:"We guess all the time in real life. Here’s how.",
+    replies:[
+      {who:"Your phone rings with an unknown number. Your friend asks:", q:"“Who is it?”", o:["I don’t know. It might be the delivery man.","I don’t know. It must to be the delivery man.","I don’t know. It can be the delivery man."], a:0, why:"Might for a guess."},
+      {who:"Your colleague hasn’t answered messages all day. Someone asks:", q:"“Where is Aziz?”", o:["He might be ill. He was coughing yesterday.","He might is ill.","He mustn’t be at work."], a:0, why:"Might + be, with a reason."},
+      {who:"There’s a long queue outside a restaurant. Your friend asks:", q:"“Is the food good there?”", o:["It must be good! Look at the queue.","It can’t be good! Look at the queue.","It must being good."], a:0, why:"A strong guess with evidence → must."}],
+    table:{ title:"Guess about the people", intro:"Write one guess for each situation. Use the word in the notes.",
+      headers:["What you see","Your guess"],
+      rows:[["a man in a white coat in a hospital","must / doctor"],["a woman with a big suitcase at the airport","might / go on holiday"],["a child crying next to a broken bike","might / be hurt"],["a man running in a heavy coat at 35°C","can’t / feel comfortable"],["two people laughing together at a café","must / be friends"]],
+      placeholder:"He must be…", check:"Check: modal + verb (no to), and can’t for negative guesses.",
+      model:"He must be a doctor. She might be going on holiday. The child might be hurt. He can’t feel comfortable in that heat. They must be friends." },
+    builder:{ title:"Guess the story", intro:"Picture: a young woman is sitting alone at a train station late at night. Complete the guesses.",
+      fields:[["She might be","waiting for a friend"],["She must be","tired"],["She can’t be","happy"],["It looks like","she has missed her train"]],
+      template:"She <mark>might be</mark> {0}. She <mark>must be</mark> {1}. She <mark>can’t be</mark> {2}. <mark>It looks like</mark> {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 1.2: describe, compare and guess. Imagine the pictures, then record yourself.", seconds:45,
+    formula:["Describe","Guess (must / might / can’t)","Compare","Opinion"],
+    example:{ q:"Picture A: a man in a suit looking at his watch at an airport. Picture B: a family with suitcases laughing at an airport. Describe and compare.", a:"In picture A, a man in a suit is looking at his watch. He <mark>must be</mark> a businessman, and he <mark>might be</mark> late for his flight, because he looks stressed. In picture B, a family is laughing. They <mark>must be</mark> going on holiday. They <mark>can’t be</mark> travelling for work, because they look so relaxed. I think the family is enjoying the airport much more than the man." },
+    questions:["Picture A: a teenager looking at a phone with a surprised face. Picture B: an old woman reading a letter and smiling. Describe, compare and guess what is happening.","Picture A: a crowded beach in summer. Picture B: an empty beach on a cloudy day. Describe and compare the pictures.","Picture A: a student sleeping on a desk in a library. Picture B: students celebrating with diplomas. Describe and compare the pictures."],
+    starters:["He / She must be…","They might be…ing","It can’t be…","It looks like…","Judging by…, I’d say…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"He must to be very tired.", wrong:[2], fix:"He must be very tired."},
+      {s:"She mustn’t be a teacher. She’s too young.", wrong:[1], fix:"She can’t be a teacher. She’s too young."},
+      {s:"They might are brothers.", wrong:[2], fix:"They might be brothers."},
+      {s:"It can be raining outside.", wrong:[1], fix:"It might be raining outside."},
+      {s:"Maybe he must be a doctor.", wrong:[0,2], fix:"He must be a doctor."}],
+    checklist:["I used must, might and can’t to guess.","I gave a reason for each guess (because…).","I used modal + be (no to).","I spoke for about 45 seconds."] }
+],
+
+/* ---------------- DAY 7 ---------------- */
+7: [
+  { type:"poll", title:"Your future", sub:"Tap the answer that is true for you.",
+    options:["I’m going to","I might","I won’t"],
+    items:[["Will you travel next summer?","{x} travel next summer."],["Will you study English tonight?","{x} study English tonight."],["Will you change your job one day?","{x} change my job one day."],["Will you learn another language?","{x} learn another language."]],
+    after:"Going to, might and will are all ways to talk about the future. Each one has its own job. Today you’ll learn which is which." },
+  { type:"rule", title:"The rule, simply", sub:"Four ways to talk about the future.", html:
+    box("Which one?", uses([["going to: a plan you have already decided","I’m going to study medicine."],["present continuous: an arrangement with a time or place","I’m meeting Aziz at 6."],["will: a prediction, a promise or a quick decision","I think it will rain. I’ll help you!"],["might: you’re not sure","I might go abroad."]])) +
+    box("How do we make them?", tbl(["","✓","✗","?"],[["going to","I’m <span class='verb'>going to visit</span>","I’m <span class='verb'>not going to visit</span>","<span class='verb'>Are</span> you <span class='verb'>going to visit</span>?"],["will","I’<span class='verb'>ll visit</span>","I <span class='verb'>won’t visit</span>","<span class='verb'>Will</span> you <span class='verb'>visit</span>?"],["present continuous","I’m <span class='verb'>visiting</span>","I’m <span class='verb'>not visiting</span>","<span class='verb'>Are</span> you <span class='verb'>visiting</span>?"]]) +
+      `<p>After <em>will</em>, <em>might</em> and <em>going to</em>, use the base verb: will <strong>go</strong>, going to <strong>go</strong>.</p>`) +
+    box("Predictions", `<p><em>I think … will…</em> / <em>I don’t think … will…</em> (more natural than “I think … won’t”)<br><em>It will probably… / It will definitely…</em></p><p><strong>After when, if, before, after:</strong> use the present: <em>When I <mark>finish</mark> school, I’ll travel.</em></p>`) },
+  { type:"mistakes", title:"Common mistakes", sub:"Learn these, and your plans will sound clear.",
+    items:[
+      {bad:"I will to study abroad.", good:"I will study abroad.", why:"No to after will."},
+      {bad:"I’m going to visiting my aunt.", good:"I’m going to visit my aunt.", why:"Going to + base verb."},
+      {bad:"I think it won’t rain.", good:"I don’t think it will rain.", why:"This sounds more natural."},
+      {bad:"When I will finish school, I’ll travel.", good:"When I finish school, I’ll travel.", why:"After when / if, use the present."},
+      {bad:"Wait, I help you!", good:"Wait, I’ll help you!", why:"A quick decision now → will."},
+      {bad:"I go to the dentist tomorrow at 5.", good:"I’m going to the dentist tomorrow at 5.", why:"An arrangement → present continuous."}],
+    test:[
+      {s:"I’m flying to Moscow on Monday.", ok:true, why:"Right: an arrangement."},
+      {s:"I think robots will do most jobs in the future.", ok:true, why:"Right: a prediction with will."},
+      {s:"She is going to buys a car.", ok:false, why:"Wrong: She is going to buy a car."},
+      {s:"If it will rain, we’ll stay home.", ok:false, why:"Wrong: If it rains, we’ll stay home."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Weekend plans with Madina", lines:[
+      {who:"Madina", t:"What ___ you doing this weekend?", o:["are","will"], a:0},
+      {who:"You", t:"I’m ___ to my cousin’s wedding on Saturday!", o:["going","go"], a:0},
+      {who:"Madina", t:"Nice! What ___ wear?", o:["are you going to","you will"], a:0},
+      {who:"You", t:"I don’t know yet. I ___ buy a new dress.", o:["might","might to"], a:0},
+      {who:"Madina", t:"I’m free on Friday. ___ come shopping with you!", o:["I’ll","I"], a:0},
+      {who:"You", t:"Thank you! I ___ forget this. 💛", o:["won’t","don’t"], a:0}]},
+    text:{ title:"🎓 Ali’s plans", intro:"Ali is finishing school this year. Write the correct future form.", lines:[
+      {t:"Ali ___ (study) economics at university. He decided last month.", a:["is going to study","'s going to study"]},
+      {t:"He thinks university ___ (be) difficult but interesting.", a:["will be","'ll be"]},
+      {t:"He ___ (meet) his new classmates next Monday at 10.", a:["is meeting","'s meeting"]},
+      {t:"When he ___ (finish) university, he wants to start a business.", a:["finishes"]},
+      {t:"He isn’t sure, but he ___ (move) to Tashkent.", a:["might move","may move"]},
+      {t:"His mum says: “Don’t worry, I ___ (help) you!”", a:["will help","'ll help"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"Look at those clouds! It ___ rain.", o:["is going to","will to"], a:0},
+      {q:"I’m ___ my friends tonight at 7.", o:["meeting","meet"], a:0},
+      {q:"The phone is ringing. ___ answer it.", o:["I’ll","I"], a:0},
+      {q:"Which is correct?", o:["When I finish, I’ll call you.","When I will finish, I’ll call you."], a:0},
+      {q:"I don’t think it ___ be easy.", o:["will","won’t"], a:0},
+      {q:"She’s going ___ a doctor.", o:["to be","be"], a:0},
+      {q:"I’m not sure. I ___ go to the party.", o:["might","am going"], a:0},
+      {q:"Which is correct?", o:["I will to call you.","I will call you."], a:1},
+      {q:"We ___ married next June. We’ve booked the venue!", o:["are getting","will get"], a:0}],
+    jumble:["I am going to study abroad","I think it will be sunny tomorrow","We are meeting at six","She might change her job"] },
+  { type:"reallife", title:"Use it in real life", sub:"Plans, promises and predictions in everyday life.",
+    replies:[
+      {who:"Your boss asks:", q:"“Can you send me the report today?”", o:["Sure, I’ll send it in an hour.","Sure, I send it in an hour.","Sure, I’m going to sending it."], a:0, why:"A promise → will."},
+      {who:"Your friend asks:", q:"“Any plans for the holidays?”", o:["Yes! I’m going to visit my grandparents in Khorezm.","Yes! I will to visit my grandparents.","Yes! I visit my grandparents."], a:0, why:"A plan → going to."},
+      {who:"A colleague asks:", q:"“Do you think the new manager will be good?”", o:["I don’t know. She might be great!","I don’t know. She might is great.","I don’t know. She will to be great."], a:0, why:"Not sure → might + be."}],
+    table:{ title:"Nigora’s diary", intro:"Write about Nigora’s future. Use the present continuous, going to, might and will.",
+      headers:["When","Plan"],
+      rows:[["Monday 10:00","dentist"],["Wednesday","start a yoga course (she decided last week)"],["Friday 19:00","dinner with Sevara at Café Lola"],["next year","maybe study in Korea (not sure)"],["the future","your prediction: become a successful designer"]],
+      placeholder:"On Monday, Nigora is…", check:"Check: arrangement → is …ing; plan → going to; not sure → might; prediction → will.",
+      model:"Nigora is going to the dentist on Monday at 10. She is going to start a yoga course on Wednesday. On Friday at 7, she’s having dinner with Sevara at Café Lola. Next year, she might study in Korea. I think she will become a successful designer." },
+    builder:{ title:"My future", intro:"Complete the sentences about your future, then press the button.",
+      fields:[["This weekend, I’m","visiting my cousins"],["Next year, I’m going to","take the CEFR exam"],["I might","study abroad"],["I think in ten years I will","have my own business"],["I won’t","give up"]],
+      template:"This weekend, <mark>I’m</mark> {0}. Next year, <mark>I’m going to</mark> {1}. <mark>I might</mark> {2}. I think in ten years <mark>I’ll</mark> {3}. <mark>I won’t</mark> {4}!" }},
+  { type:"speak", title:"Exam speaking", sub:"Part 2: a longer answer about the future. Prepare for a minute, then record yourself.", seconds:60,
+    formula:["Plan (going to)","Arrangement (I’m …ing)","Prediction (will)","Not sure (might)"],
+    example:{ q:"Talk about your plans for the next five years.", a:"Well, I have quite a few plans. Next year, I<mark>’m going to</mark> finish university, and I<mark>’m starting</mark> an internship in June. After that, I <mark>might</mark> study for a master’s degree abroad, but I’m not sure yet. I think it <mark>will</mark> be difficult, but it <mark>will</mark> help my career. In five years, I hope I<mark>’ll</mark> have a good job and my own flat." },
+    questions:["Talk about your plans for the next five years. What do you hope to achieve?","How do you think your city will change in the future?","Describe something you are planning to do this year. Why is it important to you?"],
+    starters:["I’m going to…","I’m …ing next…","I think … will…","I don’t think … will…","I might…, but I’m not sure."] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"I will to visit my aunt tomorrow.", wrong:[2], fix:"I will visit my aunt tomorrow."},
+      {s:"When I will finish school, I’ll travel.", wrong:[2], fix:"When I finish school, I’ll travel."},
+      {s:"She is going to buys a flat.", wrong:[4], fix:"She is going to buy a flat."},
+      {s:"I think it won’t be difficult.", wrong:[1,3], fix:"I don’t think it will be difficult."},
+      {s:"Wait, I help you with that bag!", wrong:[1,2], fix:"Wait, I’ll help you with that bag!"}],
+    checklist:["I used going to for plans.","I used will for predictions.","I used might when I wasn’t sure.","I spoke for about 1 minute."] }
+],
+
+/* ---------------- DAY 8 ---------------- */
+8: [
+  { type:"poll", title:"Imagine…", sub:"Tap your answer. Just imagine!",
+    options:["would","wouldn’t"],
+    items:[["If you won $1 million, would you stop working?","If I won $1 million, I {x} stop working."],["If you could live anywhere, would you leave your city?","If I could live anywhere, I {x} leave my city."],["If you saw a famous person, would you ask for a photo?","If I saw a famous person, I {x} ask for a photo."],["If you had more free time, would you learn to cook?","If I had more free time, I {x} learn to cook."]],
+    after:"These are second conditional sentences: imaginary situations. Examiners often ask “What would you do if…?” Today you’ll answer like a B2 speaker." },
+  { type:"rule", title:"The rule, simply", sub:"Real situations and imaginary situations.", html:
+    box("Which conditional?", uses([["First: real, possible future","If it rains tomorrow, I’ll stay at home."],["Second: imaginary or unlikely","If I were rich, I’d buy a house for my parents."],["Advice","If I were you, I’d take the job."]])) +
+    box("How do we make them?", tbl(["","if part","result part"],[["First conditional","If + <span class='verb'>present simple</span><br>If I <span class='verb'>pass</span>,","<span class='verb'>will</span> + verb<br>I<span class='verb'>’ll celebrate</span>."],["Second conditional","If + <span class='verb'>past simple</span><br>If I <span class='verb'>had</span> time,","<span class='verb'>would</span> + verb<br>I<span class='verb'>’d travel</span>."]]) +
+      `<p><strong>Never</strong> put <em>will</em> or <em>would</em> in the if part.</p>`) +
+    box("Good to know", `<p><strong>If I were…</strong>: use <em>were</em> for all persons in the exam (If I were you, if she were here).</p><p><strong>Change the order:</strong> <em>I’ll call you if I’m late.</em> (no comma)</p><p><strong>Unless = if not:</strong> <em>You won’t pass unless you study.</em></p>` + tip("when the examiner asks “What would you do if…?”, answer with would + a reason + one more detail.")) },
+  { type:"mistakes", title:"Common mistakes", sub:"These are the most common conditional mistakes.",
+    items:[
+      {bad:"If it will rain, we’ll stay home.", good:"If it rains, we’ll stay home.", why:"No will in the if part."},
+      {bad:"If I would have money, I would travel.", good:"If I had money, I would travel.", why:"No would in the if part. Use the past simple."},
+      {bad:"If I was you, I’d take the job.", good:"If I were you, I’d take the job.", why:"Was is common in speech, but were is better in the exam."},
+      {bad:"If I had time, I will help you.", good:"If I had time, I would help you.", why:"Past simple → would. Don’t mix."},
+      {bad:"If I win, I would buy a car.", good:"If I win, I’ll buy a car.", why:"Present → will. Don’t mix."},
+      {bad:"I would to travel the world.", good:"I would travel the world.", why:"No to after would."}],
+    test:[
+      {s:"If you study hard, you’ll pass the exam.", ok:true, why:"Right: first conditional."},
+      {s:"If I knew her number, I would call her.", ok:true, why:"Right: second conditional."},
+      {s:"If he will come, I’ll tell him.", ok:false, why:"Wrong: If he comes, I’ll tell him."},
+      {s:"If I would be a bird, I would fly.", ok:false, why:"Wrong: If I were a bird, I would fly."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Dreaming with Ulug‘bek", lines:[
+      {who:"Ulug‘bek", t:"What would you do if you ___ the lottery?", o:["won","win"], a:0},
+      {who:"You", t:"I ___ buy a house for my parents first.", o:["would","will"], a:0},
+      {who:"Ulug‘bek", t:"Nice! If I ___ you, I’d travel too 😄", o:["were","am"], a:0},
+      {who:"You", t:"Maybe! But seriously, if I ___ my exam next month, I’ll go to Turkey.", o:["pass","will pass"], a:0},
+      {who:"Ulug‘bek", t:"You will! If you ___ help, call me.", o:["need","needed"], a:0},
+      {who:"You", t:"Thanks! ___ you if I have questions.", o:["I’ll call","I would call"], a:0}]},
+    text:{ title:"💌 Advice column", intro:"Dilfuza writes: “I want to study abroad, but I’m scared.” Complete the answer.", lines:[
+      {t:"If I ___ (be) you, I would apply anyway.", a:["were","was"]},
+      {t:"If you ___ (not / try), you’ll never know.", a:["don't try","do not try"]},
+      {t:"If you get a scholarship, it ___ (change) your life.", a:["will change","'ll change"]},
+      {t:"If I had your chance, I ___ (take) it immediately.", a:["would take","'d take"]},
+      {t:"You ___ (feel) less scared if you talk to other students.", a:["will feel","'ll feel"]},
+      {t:"If you ___ (need) more advice, write again!", a:["need"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"If it ___ tomorrow, we’ll stay home.", o:["rains","will rain"], a:0},
+      {q:"If I ___ rich, I’d travel the world.", o:["were","would be"], a:0},
+      {q:"If she studies, she ___ pass.", o:["will","would"], a:0},
+      {q:"I ___ buy a car if I had money.", o:["would","will"], a:0},
+      {q:"If I were you, ___ apologise.", o:["I’d","I’ll"], a:0},
+      {q:"Which is correct?", o:["If I would know, I’d tell you.","If I knew, I’d tell you."], a:1},
+      {q:"What would you do if you ___ a snake?", o:["saw","see"], a:0},
+      {q:"If he ___ late, he’ll miss the bus.", o:["is","will be"], a:0},
+      {q:"You won’t pass ___ you study.", o:["unless","if"], a:0}],
+    jumble:["If I were you I would apply","If it rains we will stay at home","What would you do if you won","I would travel if I had more time"] },
+  { type:"reallife", title:"Use it in real life", sub:"Giving advice and talking about possibilities.",
+    replies:[
+      {who:"Your friend says:", q:"“I don’t know whether to accept the job in Tashkent.”", o:["If I were you, I’d accept it.","If I am you, I accept it.","If I would be you, I’d accept it."], a:0, why:"Advice: If I were you, I’d…"},
+      {who:"Your little brother asks:", q:"“Can I go to the park?”", o:["Yes, if you finish your homework first.","Yes, if you will finish your homework.","Yes, if you would finish your homework."], a:0, why:"No will / would after if."},
+      {who:"At work, a colleague asks:", q:"“What will happen if we miss the deadline?”", o:["If we miss it, the client will be unhappy.","If we will miss it, the client is unhappy.","If we missed it, the client will be unhappy."], a:0, why:"Real situation → first conditional."}],
+    table:{ title:"What would they do?", intro:"Write a second conditional sentence for each person.",
+      headers:["Person","If…","They would…"],
+      rows:[["Jamshid","have more money","buy a car"],["Zarina","speak Korean","work in Seoul"],["Bekzod","not be so busy","go to the gym"],["Lola","live by the sea","swim every day"]],
+      placeholder:"If Jamshid had more money,…", check:"Check: if + past simple, would + base verb.",
+      model:"If Jamshid had more money, he would buy a car. If Zarina spoke Korean, she would work in Seoul. If Bekzod weren’t so busy, he would go to the gym. If Lola lived by the sea, she would swim every day." },
+    builder:{ title:"What would you do?", intro:"Complete the sentences about you, then press the button.",
+      fields:[["If I had a free year, I would","travel around Asia"],["If I could meet anyone, I would meet","my favourite writer"],["If I pass my exam, I will","celebrate with my family"],["If I were the mayor of my city, I would","build more parks"]],
+      template:"<mark>If I had</mark> a free year, <mark>I would</mark> {0}. <mark>If I could</mark> meet anyone, <mark>I would</mark> meet {1}. <mark>If I pass</mark> my exam, <mark>I’ll</mark> {2}. <mark>If I were</mark> the mayor of my city, <mark>I’d</mark> {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 2: imaginary and real situations. Prepare for a minute, then record yourself.", seconds:60,
+    formula:["Answer (would)","Reason (because)","Details","Real plan (if + will)"],
+    example:{ q:"What would you do if you could live in any country?", a:"That’s a difficult question! <mark>If I could</mark> live anywhere, I<mark>’d</mark> probably choose Japan, because I love its culture and the food. <mark>If I lived</mark> there, I<mark>’d</mark> learn Japanese and travel around the country by train. Of course, I<mark>’d</mark> miss my family a lot. But in real life, <mark>if I get</mark> a chance to visit Japan next year, I<mark>’ll</mark> definitely go." },
+    questions:["What would you do if you had a whole year free?","If you could change one thing about your city, what would it be? Why?","What will you do if you get a high score in the CEFR exam?"],
+    starters:["If I could…, I would…","If I had…, I’d…","If I were…, I’d…","If I…, I will…","Unless…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"If I will see him, I’ll tell him.", wrong:[2], fix:"If I see him, I’ll tell him."},
+      {s:"If I would have a car, I’d drive to work.", wrong:[2,3], fix:"If I had a car, I’d drive to work."},
+      {s:"If she studied more, she will pass.", wrong:[5], fix:"If she studied more, she would pass."},
+      {s:"I would to buy a house.", wrong:[2], fix:"I would buy a house."},
+      {s:"If I am you, I’d say sorry.", wrong:[2], fix:"If I were you, I’d say sorry."}],
+    checklist:["I used if + past simple, would + verb for imaginary situations.","I used if + present, will + verb for real plans.","I didn’t put will / would after if.","I spoke for about 1 minute."] }
+],
+
+/* ---------------- DAY 9 ---------------- */
+9: [
+  { type:"poll", title:"Love it or hate it?", sub:"Tap your answer.",
+    options:["love","don’t mind","hate"],
+    items:[["Cooking?","I {x} cooking."],["Getting up early?","I {x} getting up early."],["Waiting in queues?","I {x} waiting in queues."],["Speaking in public?","I {x} speaking in public."]],
+    after:"After love, don’t mind and hate, we use the -ing form (cooking). Some verbs need -ing, others need to + verb. That’s today’s topic." },
+  { type:"rule", title:"The rule, simply", sub:"-ing or to + verb?", html:
+    box("Three groups", uses([["Verb + -ing","I enjoy reading. I can’t stand waiting."],["Verb + to + verb","I want to travel. I decided to stay."],["After prepositions: -ing","I’m good at drawing. I’m interested in learning Korean."]])) +
+    box("Which verbs?", tbl(["+ -ing","+ to + verb"],[["enjoy, don’t mind, can’t stand, finish, avoid, keep, miss, spend time","want, would like, decide, hope, plan, need, learn, promise, agree"],["I <span class='verb'>enjoy cooking</span>.","I <span class='verb'>want to cook</span>."]]) +
+      `<p><strong>Both are OK:</strong> like, love, hate, start, begin: <em>I like cooking. / I like to cook.</em></p><p><strong>Would like + to:</strong> <em>I’d like <mark>to visit</mark> Paris.</em></p>`) +
+    box("-ing as a subject and after prepositions", `<p><em><mark>Swimming</mark> is good for you.</em></p><p><em>interested in, good at, keen on, tired of, afraid of + -ing</em></p><p><strong>Careful:</strong> <em>look forward to</em> + -ing: <em>I look forward to <mark>seeing</mark> you.</em> (here, to is a preposition)</p>` + tip("in Part 1.1, use a mix: “I really enjoy cooking, but I’d like to learn to bake.”")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Learn these, and your answers will sound natural.",
+    items:[
+      {bad:"I enjoy to read.", good:"I enjoy reading.", why:"Enjoy + -ing."},
+      {bad:"I want going abroad.", good:"I want to go abroad.", why:"Want + to + verb."},
+      {bad:"I’m interested in learn languages.", good:"I’m interested in learning languages.", why:"After a preposition: -ing."},
+      {bad:"I look forward to see you.", good:"I look forward to seeing you.", why:"Look forward to + -ing."},
+      {bad:"I would like visiting Paris.", good:"I would like to visit Paris.", why:"Would like + to + verb."},
+      {bad:"Read books is my hobby.", good:"Reading books is my hobby.", why:"As a subject, use -ing."}],
+    test:[
+      {s:"I can’t stand waiting for buses.", ok:true, why:"Right: can’t stand + -ing."},
+      {s:"She decided studying medicine.", ok:false, why:"Wrong: She decided to study medicine."},
+      {s:"I’m good at remembering names.", ok:true, why:"Right: good at + -ing."},
+      {s:"We are planning going to Bukhara.", ok:false, why:"Wrong: We are planning to go to Bukhara."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Getting to know your new colleague Timur", lines:[
+      {who:"Timur", t:"What do you enjoy ___ at weekends?", o:["doing","to do"], a:0},
+      {who:"You", t:"I love ___ in the mountains. And you?", o:["hiking","hike"], a:0},
+      {who:"Timur", t:"I’m really keen on ___ photos.", o:["taking","take"], a:0},
+      {who:"You", t:"Cool! I’d like ___ photography one day.", o:["to learn","learning"], a:0},
+      {who:"Timur", t:"I can teach you. I don’t mind ___ my tips!", o:["sharing","to share"], a:0},
+      {who:"You", t:"Great! I’m looking forward to ___ you on Saturday.", o:["seeing","see"], a:0}]},
+    text:{ title:"🎨 Sevara’s profile", intro:"Write the correct form: -ing or to + verb.", lines:[
+      {t:"Sevara enjoys ___ (paint) in her free time.", a:["painting"]},
+      {t:"She wants ___ (become) an artist.", a:["to become"]},
+      {t:"She is good at ___ (draw) people.", a:["drawing"]},
+      {t:"She hates ___ (wake) up early.", a:["waking"]},
+      {t:"Last year, she decided ___ (take) an art course.", a:["to take"]},
+      {t:"___ (paint) helps her relax.", a:["painting"]},
+      {t:"She’s looking forward to ___ (visit) the Louvre one day.", a:["visiting"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"I enjoy ___.", o:["swimming","to swim"], a:0},
+      {q:"She wants ___ a doctor.", o:["to be","being"], a:0},
+      {q:"I’m interested in ___ history.", o:["learning","learn"], a:0},
+      {q:"We decided ___ at home.", o:["to stay","staying"], a:0},
+      {q:"Which is correct?", o:["I can’t stand waiting.","I can’t stand to waiting."], a:0},
+      {q:"He avoids ___ fast food.", o:["eating","to eat"], a:0},
+      {q:"I’d like ___ a coffee, please.", o:["to order","ordering"], a:0},
+      {q:"___ is my favourite hobby.", o:["Dancing","Dance"], a:0},
+      {q:"I look forward to ___ from you.", o:["hearing","hear"], a:0},
+      {q:"She promised ___ me.", o:["to help","helping"], a:0}],
+    jumble:["I really enjoy reading books","She wants to learn Korean","I am good at cooking","Swimming is good for your health"] },
+  { type:"reallife", title:"Use it in real life", sub:"Ordering, writing emails and making small talk.",
+    replies:[
+      {who:"A waiter asks:", q:"“What would you like?”", o:["I’d like to have the soup, please.","I’d like having the soup.","I like have the soup."], a:0, why:"Would like + to + verb."},
+      {who:"You are ending an email to a university:", q:"(Choose the best last line.)", o:["I look forward to hearing from you.","I look forward to hear from you.","I look forward hearing from you."], a:0, why:"Look forward to + -ing."},
+      {who:"A new friend asks:", q:"“What do you do to relax?”", o:["I enjoy walking in the park.","I enjoy to walk in the park.","I enjoy walk in the park."], a:0, why:"Enjoy + -ing."}],
+    table:{ title:"Likes and dislikes survey", intro:"Write 2 sentences about each person.",
+      headers:["Name","Loves","Hates","Wants (future)"],
+      rows:[["Otabek","play chess","get up early","visit Spain"],["Dildora","cook new recipes","wait in queues","open a café"],["Jasur","watch football","do homework","become a coach"]],
+      placeholder:"Otabek loves playing…", check:"Check: love / hate + -ing, want + to + verb.",
+      model:"Otabek loves playing chess, but he hates getting up early. He wants to visit Spain. Dildora loves cooking new recipes. She hates waiting in queues, and she wants to open a café. Jasur loves watching football, but he hates doing homework. He wants to become a coach." },
+    builder:{ title:"All about my free time", intro:"Complete the sentences about you, then press the button.",
+      fields:[["I really enjoy","playing volleyball"],["I can’t stand","sitting at home all day"],["I’m good at","making people laugh"],["One day, I’d like to","run a marathon"],["I’m looking forward to","finishing my exams"]],
+      template:"I really <mark>enjoy</mark> {0}, but I <mark>can’t stand</mark> {1}. I’m <mark>good at</mark> {2}. One day, I<mark>’d like to</mark> {3}. Right now, I’m <mark>looking forward to</mark> {4}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 1.1 questions about likes and dislikes. Record yourself.", seconds:30,
+    formula:["Answer","Like / hate + -ing","Why","Want / would like + to"],
+    example:{ q:"What do you like doing in your free time?", a:"Well, I really <mark>enjoy cooking</mark>, especially for my friends. I find it relaxing, and I love <mark>trying</mark> new recipes from different countries. But I <mark>can’t stand washing</mark> the dishes afterwards! In the future, I<mark>’d like to take</mark> a professional cooking course." },
+    questions:["What do you enjoy doing at the weekend?","Is there anything you hate doing but have to do?","What new skill would you like to learn? Why?"],
+    starters:["I really enjoy…ing","I can’t stand…ing","I’m keen on…ing","I’d like to…","I’m looking forward to…ing"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"I enjoy to play tennis.", wrong:[2,3], fix:"I enjoy playing tennis."},
+      {s:"She wants learning Spanish.", wrong:[2], fix:"She wants to learn Spanish."},
+      {s:"I’m interested in cook.", wrong:[3], fix:"I’m interested in cooking."},
+      {s:"I look forward to meet you.", wrong:[4], fix:"I look forward to meeting you."},
+      {s:"Play chess is fun.", wrong:[0], fix:"Playing chess is fun."}],
+    checklist:["I used -ing after enjoy, love, hate, can’t stand.","I used to + verb after want, would like, decide.","I used -ing after prepositions (good at, interested in).","I spoke for about 30 seconds."] }
+],
+
+/* ---------------- DAY 10 ---------------- */
+10: [
+  { type:"poll", title:"What kind of person?", sub:"Tap the answer that is true for you.",
+    options:["funny","kind","honest","clever"],
+    items:[["What kind of friends do you like?","I like friends who are {x}."],["What kind of teachers do you like?","I like teachers who are {x}."],["What kind of boss would you like?","I’d like a boss who is {x}."]],
+    after:"Who, which, where and that join ideas together. They make your answers longer and more detailed, which is exactly what examiners want in Part 2." },
+  { type:"rule", title:"The rule, simply", sub:"Adding details with who, which, where…", html:
+    box("Which word?", uses([["who → people","a teacher who inspired me"],["which / that → things","a book which changed my life"],["where → places","the village where I grew up"],["whose → possession","a friend whose father is a pilot"],["when → time","the day when I met her"]])) +
+    box("Two types", tbl(["Type","Example","Rules"],[["Necessary information","The man <span class='verb'>who lives next door</span> is a doctor.","No commas. You can use that."],["Extra information","My mother, <span class='verb'>who is 50</span>, is a teacher.","Commas. No that."]]) +
+      `<p>You can leave out who / which / that when it’s the object: <em>The book (that) I read was great.</em></p>`) +
+    box("Don’t repeat!", `<p>✗ <em>The book which I read <s>it</s></em> → ✓ <em>The book which I read</em><br>✗ <em>The café where we met <s>there</s></em> → ✓ <em>The café where we met</em></p>` + tip("start Part 2 with a relative clause: “I’d like to talk about my uncle, who is a pilot.”")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Learn these, and your details will be correct.",
+    items:[
+      {bad:"The man which lives next door is a doctor.", good:"The man who lives next door is a doctor.", why:"People → who."},
+      {bad:"This is the city where I visited last year.", good:"This is the city (that) I visited last year.", why:"Visit needs an object, so use that / which (or nothing)."},
+      {bad:"My sister, that lives in Seoul, is a nurse.", good:"My sister, who lives in Seoul, is a nurse.", why:"No that with commas."},
+      {bad:"The book which I read it was great.", good:"The book which I read was great.", why:"Don’t repeat it."},
+      {bad:"I have a friend who his father is a pilot.", good:"I have a friend whose father is a pilot.", why:"Who + his → whose."},
+      {bad:"That’s the restaurant where we ate there.", good:"That’s the restaurant where we ate.", why:"Don’t repeat there."}],
+    test:[
+      {s:"The woman who called you is my aunt.", ok:true, why:"Right: people → who."},
+      {s:"This is the phone which I bought it yesterday.", ok:false, why:"Wrong: …which I bought yesterday."},
+      {s:"Tashkent, which is the capital, is very big.", ok:true, why:"Right: extra information with commas."},
+      {s:"I met a girl which speaks five languages.", ok:false, why:"Wrong: a girl who speaks…"}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Talking about a wedding with Kamila", lines:[
+      {who:"Kamila", t:"Who was the woman ___ was singing at the wedding?", o:["who","which"], a:0},
+      {who:"You", t:"That’s my cousin, ___ voice is amazing!", o:["whose","who’s"], a:0},
+      {who:"Kamila", t:"And the restaurant ___ you had the party was so beautiful.", o:["where","which"], a:0},
+      {who:"You", t:"Yes! The food ___ they served was delicious.", o:["that","who"], a:0},
+      {who:"Kamila", t:"Who made the cake ___ everyone was talking about?", o:["which","where"], a:0},
+      {who:"You", t:"My aunt, ___ is a professional baker!", o:["who","that"], a:0}]},
+    text:{ title:"🏞️ My favourite place", intro:"Write who, which, where or whose.", lines:[
+      {t:"I want to talk about Chimgan, ___ is a mountain area near Tashkent.", a:["which"]},
+      {t:"It’s a place ___ my family goes every summer.", a:["where"]},
+      {t:"We stay with a man ___ owns a small guesthouse.", a:["who","that"]},
+      {t:"He has a son ___ name is Botir.", a:["whose"]},
+      {t:"The food ___ they cook there is simple but delicious.", a:["which","that"]},
+      {t:"It’s the place ___ I feel most relaxed.", a:["where"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"She’s the teacher ___ helped me.", o:["who","which"], a:0},
+      {q:"This is the café ___ we first met.", o:["where","which"], a:0},
+      {q:"The film ___ I watched was boring.", o:["that","who"], a:0},
+      {q:"I have a friend ___ mother is a judge.", o:["whose","who"], a:0},
+      {q:"Which is correct?", o:["My dad, who is 60, still works.","My dad, that is 60, still works."], a:0},
+      {q:"The car ___ he bought is red.", o:["which","where"], a:0},
+      {q:"Which is correct?", o:["The book I read was great.","The book I read it was great."], a:0},
+      {q:"Bukhara is the city ___ I was born.", o:["where","which"], a:0},
+      {q:"Do you know the man ___ is talking to Aziz?", o:["who","whose"], a:0}],
+    jumble:["This is the house where I grew up","She is the friend who always helps me","The book that I read was amazing","I have a friend whose father is a pilot"] },
+  { type:"reallife", title:"Use it in real life", sub:"Explaining and describing things clearly.",
+    replies:[
+      {who:"A tourist asks:", q:"“What’s the Registan?”", o:["It’s a famous square in Samarkand which has three beautiful madrasas.","It’s a famous square who has three madrasas.","It’s a famous square where has three madrasas."], a:0, why:"Things → which."},
+      {who:"At a party, someone asks:", q:"“Who’s that man?”", o:["He’s the man who owns this restaurant.","He’s the man which owns this restaurant.","He’s the man who he owns this restaurant."], a:0, why:"People → who, and don’t repeat he."},
+      {who:"Your friend asks:", q:"“What are you looking for?”", o:["The book that you gave me last week.","The book that you gave me it last week.","The book who you gave me last week."], a:0, why:"Don’t repeat it."}],
+    table:{ title:"Who’s who at work?", intro:"Write one sentence about each, using who, whose, where or which.",
+      headers:["Person / thing","Information"],
+      rows:[["Mr Karimov","the manager / started the company in 2010"],["Aziza","the designer / her sister is my friend"],["the meeting room","we have lunch there"],["the new laptop","the company bought it last week"]],
+      placeholder:"Mr Karimov is the manager who…", check:"Check: who for people, whose for possession, where for places, which for things.",
+      model:"Mr Karimov is the manager who started the company in 2010. Aziza is the designer whose sister is my friend. The meeting room is the place where we have lunch. The new laptop is the one which the company bought last week." },
+    builder:{ title:"A person who inspires me", intro:"Complete the sentences, then press the button.",
+      fields:[["The person who inspires me is","my grandmother"],["who is","75 years old"],["They live in a place where","everyone knows each other"],["The thing which I admire most is","her kindness"],["The best advice that they gave me was","never give up"]],
+      template:"The person <mark>who</mark> inspires me is {0}, <mark>who</mark> is {1}. They live in a place <mark>where</mark> {2}. The thing <mark>which</mark> I admire most is {3}. The best advice <mark>that</mark> they gave me was “{4}”." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 2: describe a person, place or thing. Prepare for a minute, then record yourself.", seconds:60,
+    formula:["Who / what is it?","Details (who, which, where)","A story or example","Why it matters"],
+    example:{ q:"Describe a person who has influenced you.", a:"I’d like to talk about my English teacher, Ms Dilnoza, <mark>who</mark> taught me at school. She was a person <mark>who</mark> always believed in her students. I remember a day <mark>when</mark> I failed a test and wanted to give up. She took me to the library, <mark>where</mark> we read stories together after class. The thing <mark>which</mark> I remember most is her patience. Because of her, I love English today." },
+    questions:["Describe a person who has influenced you. Who are they and why are they important?","Describe a place where you like to spend time. What is special about it?","Talk about a gift which you received and remember well."],
+    starters:["I’d like to talk about…, who…","It’s a place where…","The thing which I like most is…","He / She is someone whose…","I remember the day when…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"I have a friend which lives in Korea.", wrong:[4], fix:"I have a friend who lives in Korea."},
+      {s:"This is the town where I visited.", wrong:[4], fix:"This is the town (that) I visited."},
+      {s:"My brother, that is a doctor, works in Tashkent.", wrong:[2], fix:"My brother, who is a doctor, works in Tashkent."},
+      {s:"The phone which I bought it is broken.", wrong:[5], fix:"The phone which I bought is broken."},
+      {s:"She’s the girl who her mother is a teacher.", wrong:[3,4], fix:"She’s the girl whose mother is a teacher."}],
+    checklist:["I used who for people, which / that for things, where for places.","I added at least three details with relative clauses.","I didn’t repeat it / there / him after the relative word.","I spoke for about 1 minute."] }
+],
+/* ---------------- DAY 11 ---------------- */
+11: [
+  { type:"poll", title:"Agree or disagree?", sub:"Tap your opinion.",
+    options:["agree","disagree"],
+    items:[["Social media is good for teenagers.","I {x} that social media is good for teenagers."],["Everyone should learn English.","I {x} that everyone should learn English."],["Online shopping is better than going to shops.","I {x} that online shopping is better than going to shops."],["Homework should be banned.","I {x} that homework should be banned."]],
+    after:"Easy, right? But in Part 3 you need to show both sides. Today you’ll learn although, however, despite, whereas and on the other hand, so you can argue like a B2–C1 speaker." },
+  { type:"rule", title:"The rule, simply", sub:"Showing two sides of an idea.", html:
+    box("Which linker?", uses([["although / even though + sentence","Although it’s expensive, it’s worth it."],["however / on the other hand: start a new sentence","It’s easy. However, it takes time."],["despite / in spite of + noun or -ing","Despite the rain, we went out."],["whereas / while: compare two facts","Cities are noisy, whereas villages are quiet."]])) +
+    box("The grammar", tbl(["Linker","What comes after?","Example"],[["although","subject + verb","<span class='verb'>Although</span> she was tired, she studied."],["despite / in spite of","noun or -ing","<span class='verb'>Despite</span> being tired, she studied."],["however","a comma, then a sentence","She was tired. <span class='verb'>However</span>, she studied."],["whereas","subject + verb","I like tea, <span class='verb'>whereas</span> my sister likes coffee."]]) +
+      `<p><strong>Careful:</strong> not <em>despite <s>of</s></em>, and don’t use <em>although</em> and <em>but</em> together.</p>`) +
+    box("A Part 3 structure", `<p><em><mark>On the one hand</mark>, … <mark>On the other hand</mark>, … <mark>Although</mark> …, I believe that…</em></p>` + tip("in Part 3, talk about the points for, then the points against, then give your opinion. Contrast linkers connect everything.")) },
+  { type:"mistakes", title:"Common mistakes", sub:"These are very common in Part 3.",
+    items:[
+      {bad:"Despite of the rain, we went out.", good:"Despite the rain, we went out.", why:"Despite (no of). Or: in spite of."},
+      {bad:"Despite it was raining, we went out.", good:"Although it was raining, we went out.", why:"Despite + noun / -ing. Although + sentence."},
+      {bad:"Although it’s expensive, but I like it.", good:"Although it’s expensive, I like it.", why:"Don’t use although and but together."},
+      {bad:"However it is expensive, people buy it.", good:"Although it is expensive, people buy it.", why:"However doesn’t join two parts of one sentence."},
+      {bad:"On the other side, it is cheap.", good:"On the other hand, it is cheap.", why:"The phrase is on the other hand."},
+      {bad:"In spite the cost, we bought it.", good:"In spite of the cost, we bought it.", why:"In spite of (with of)."}],
+    test:[
+      {s:"Although she was tired, she finished her homework.", ok:true, why:"Right: although + sentence."},
+      {s:"Despite of his age, he runs every day.", ok:false, why:"Wrong: Despite his age…"},
+      {s:"Cities have more jobs, whereas villages have cleaner air.", ok:true, why:"Right: whereas compares two facts."},
+      {s:"Even though it was late, but we continued.", ok:false, why:"Wrong: Even though it was late, we continued."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"A friendly debate with Rustam", lines:[
+      {who:"Rustam", t:"Online lessons are great. ___, some students miss real classrooms.", o:["However","Although"], a:0},
+      {who:"You", t:"True. ___ they’re convenient, it’s harder to focus.", o:["Although","Despite"], a:0},
+      {who:"Rustam", t:"___ the problems, I still prefer them.", o:["Despite","Although"], a:0},
+      {who:"You", t:"I see. Online lessons save time, ___ classroom lessons are more social.", o:["whereas","despite"], a:0},
+      {who:"Rustam", t:"On the ___ hand, you can study from anywhere!", o:["other","another"], a:0},
+      {who:"You", t:"OK, ___ being tired of screens, I agree with you 😄", o:["despite","although"], a:0}]},
+    text:{ title:"👔 Should students wear school uniforms?", intro:"Write although, however, despite or whereas.", lines:[
+      {t:"___ uniforms can be expensive, they help students look equal.", a:["although","even though"]},
+      {t:"Uniforms save time in the morning. ___, they don’t let students express themselves.", a:["however","on the other hand"]},
+      {t:"___ the cost, many parents support uniforms.", a:["despite","in spite of"]},
+      {t:"Some students like uniforms, ___ others hate them.", a:["whereas","while"]},
+      {t:"___ being uncomfortable, uniforms make schools look professional.", a:["despite","in spite of"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"___ it was cold, we went swimming.", o:["Although","Despite"], a:0},
+      {q:"___ the cold, we went swimming.", o:["Despite","Although"], a:0},
+      {q:"It’s cheap. ___, it’s not very good.", o:["However","Although"], a:0},
+      {q:"Which is correct?", o:["Despite the traffic, we arrived on time.","Despite of the traffic, we arrived on time."], a:0},
+      {q:"Cats are independent, ___ dogs need attention.", o:["whereas","despite"], a:0},
+      {q:"On the ___ hand, it saves money.", o:["other","another"], a:0},
+      {q:"Which is correct?", o:["Although it’s hard, I enjoy it.","Although it’s hard, but I enjoy it."], a:0},
+      {q:"In spite ___ being ill, she came to work.", o:["of","for"], a:0},
+      {q:"___ being rich, he isn’t happy.", o:["Despite","Although"], a:0}],
+    jumble:["I like cities whereas my sister likes villages","She went to work despite being ill","We arrived on time despite the traffic","I enjoy it although it is difficult"] },
+  { type:"reallife", title:"Use it in real life", sub:"Giving balanced answers at work and with friends.",
+    replies:[
+      {who:"A friend asks:", q:"“How was the new restaurant?”", o:["Although the food was great, the service was slow.","Despite the food was great, the service was slow.","Although the food was great, but the service was slow."], a:0, why:"Although + sentence, no but."},
+      {who:"Your manager asks:", q:"“Should we move the office to the city centre?”", o:["It would be easier for clients. On the other hand, the rent is much higher.","It would be easier for clients. On the other side, the rent is higher.","It would be easier. Despite of that, the rent is higher."], a:0, why:"On the other hand."},
+      {who:"Your mum asks:", q:"“Did you go to the gym today?”", o:["Yes, despite feeling tired.","Yes, despite I felt tired.","Yes, despite of feeling tired."], a:0, why:"Despite + -ing."}],
+    table:{ title:"For and against: living in a big city", intro:"Write 3 or 4 sentences using although, however, despite and whereas.",
+      headers:["For ✓","Against ✗"],
+      rows:[["more jobs","expensive rent"],["good hospitals and universities","traffic and pollution"],["lots of entertainment","stressful and noisy"]],
+      placeholder:"Big cities have more jobs. However,…", check:"Check: although + sentence, despite + noun / -ing, However + comma.",
+      model:"Big cities have more jobs. However, the rent is very expensive. Although cities have good hospitals and universities, there is a lot of traffic and pollution. Despite the noise and stress, there is lots of entertainment. Personally, I think the advantages are bigger than the disadvantages." },
+    builder:{ title:"Your opinion paragraph", intro:"Topic: “Students should have part-time jobs.” Complete the paragraph.",
+      fields:[["On the one hand, part-time jobs","teach students responsibility"],["On the other hand, they","take time away from studying"],["Although","some students get tired"],["I believe that","a few hours a week is useful"]],
+      template:"<mark>On the one hand</mark>, part-time jobs {0}. <mark>On the other hand</mark>, they {1}. <mark>Although</mark> {2}, I believe that {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 3: discuss both sides and give your opinion. Prepare for a minute, then record yourself.", seconds:90,
+    formula:["Introduce the topic","Points for","Points against","Your opinion"],
+    example:{ q:"“Children should not have smartphones.” Talk about the points for and against.", a:"This is an important topic nowadays. <mark>On the one hand</mark>, smartphones help children stay in touch with their parents, and they can use them for learning. <mark>On the other hand</mark>, many children spend too much time on social media. <mark>Although</mark> phones are useful, they can harm children’s sleep and concentration. <mark>Despite</mark> these problems, I don’t think we should ban them completely. I believe parents should control how long their children use them." },
+    questions:["“Everyone should go to university.” For: better jobs, more knowledge. Against: expensive, not everyone needs it. Discuss both sides and give your opinion.","“Tourism is good for a country.” For: money and jobs, cultural exchange. Against: pollution, higher prices. Discuss both sides.","“People should work from home.” For: no traffic, flexible hours. Against: loneliness, hard to focus. Discuss both sides."],
+    starters:["On the one hand,… On the other hand,…","Although…, …","…. However, …","Despite…,","…, whereas…","Overall, I believe…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"Despite of the rain, we played football.", wrong:[1], fix:"Despite the rain, we played football."},
+      {s:"Although it was late, but we kept talking.", wrong:[4], fix:"Although it was late, we kept talking."},
+      {s:"Despite it was cold, she swam.", wrong:[0], fix:"Although it was cold, she swam."},
+      {s:"On the other side, it is very expensive.", wrong:[3], fix:"On the other hand, it is very expensive."},
+      {s:"In spite the problems, the project was a success.", wrong:[1,2], fix:"In spite of the problems, the project was a success."}],
+    checklist:["I talked about both sides.","I used at least three contrast linkers.","I used despite + noun / -ing and although + sentence.","I gave a clear opinion at the end.","I spoke for about 1.5 minutes."] }
+],
+
+/* ---------------- DAY 12 ---------------- */
+12: [
+  { type:"poll", title:"In your country…", sub:"Tap the answer that is true where you live.",
+    options:["usually","sometimes","never"],
+    items:[["Is English taught in primary schools?","English is {x} taught in primary schools."],["Is tea served with every meal?","Tea is {x} served with every meal."],["Are shoes worn inside the house?","Shoes are {x} worn inside the house."],["Are guests offered bread first?","Guests are {x} offered bread first."]],
+    after:"These sentences are passive: be + past participle. We use the passive when the action is more important than the person. In Part 3, it makes you sound objective and academic." },
+  { type:"rule", title:"The rule, simply", sub:"When the action matters more than the person.", html:
+    box("When do we use the passive?", uses([["We don’t know or don’t care who did it","My phone was stolen."],["The action or result is important","The bridge was built in 1960."],["To sound objective in discussions","It is believed that exercise improves memory."]])) +
+    box("How do we make it? be + past participle", tbl(["Tense","Active","Passive"],[["Present simple","People speak Uzbek here.","Uzbek <span class='verb'>is spoken</span> here."],["Past simple","They built it in 1960.","It <span class='verb'>was built</span> in 1960."],["Present perfect","They have opened a new school.","A new school <span class='verb'>has been opened</span>."],["Future","They will finish it soon.","It <span class='verb'>will be finished</span> soon."],["Modals","We should ban plastic bags.","Plastic bags <span class='verb'>should be banned</span>."]]) +
+      `<p><strong>By:</strong> say who did it only if it’s important: <em>Khamsa was written <mark>by</mark> Alisher Navoi.</em></p>`) +
+    box("Sound objective: impersonal passive", `<p><em>It <mark>is believed</mark> that… It <mark>is said</mark> that… It <mark>is often argued</mark> that… It <mark>is known</mark> that…</em></p><p>Or: <em>Coffee <mark>is thought to be</mark> good for memory.</em></p>` + tip("in Part 3, start with “It is often said that…” to introduce one side of the argument.")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Learn these, and your passive will be perfect.",
+    items:[
+      {bad:"The bridge was build in 1960.", good:"The bridge was built in 1960.", why:"Use the past participle (built)."},
+      {bad:"English is speak all over the world.", good:"English is spoken all over the world.", why:"Be + past participle (spoken)."},
+      {bad:"It believes that sport is healthy.", good:"It is believed that sport is healthy.", why:"Impersonal passive: It is + past participle."},
+      {bad:"The new law has been introduce.", good:"The new law has been introduced.", why:"Don’t forget -ed."},
+      {bad:"Plastic bags should banned.", good:"Plastic bags should be banned.", why:"Modal + be + past participle."},
+      {bad:"My phone stole yesterday.", good:"My phone was stolen yesterday.", why:"The phone didn’t steal! Use the passive."}],
+    test:[
+      {s:"A new hospital was opened last year.", ok:true, why:"Right: was + opened."},
+      {s:"It is said that exercise improves mood.", ok:true, why:"Right: impersonal passive."},
+      {s:"The car was wash yesterday.", ok:false, why:"Wrong: The car was washed yesterday."},
+      {s:"Uzbek is spoke in Uzbekistan.", ok:false, why:"Wrong: Uzbek is spoken in Uzbekistan."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"City news with Akbar", lines:[
+      {who:"Akbar", t:"Did you hear? A new park ___ near my house!", o:["has been built","has built"], a:0},
+      {who:"You", t:"Really? Who was it designed ___?", o:["by","from"], a:0},
+      {who:"Akbar", t:"A Korean company. It ___ that it cost $5 million.", o:["is said","says"], a:0},
+      {who:"You", t:"Wow. I hope cars ___ there.", o:["aren’t allowed","don’t allow"], a:0},
+      {who:"Akbar", t:"No, cars ___ be banned completely.", o:["will","are"], a:0},
+      {who:"You", t:"Great! It ___ to be the biggest park in the city.", o:["is believed","believes"], a:0}]},
+    text:{ title:"🇺🇿 Facts about Uzbekistan", intro:"Write the verbs in the passive.", lines:[
+      {t:"Uzbek ___ (speak) by millions of people.", a:["is spoken"]},
+      {t:"The buildings of the Registan ___ (build) between the 15th and 17th centuries.", a:["were built"]},
+      {t:"Many old buildings ___ (restore) in recent years.", a:["have been restored"]},
+      {t:"Cotton ___ (grow) in many regions.", a:["is grown"]},
+      {t:"Plov ___ (cook) in a big pot called a kazan.", a:["is cooked"]},
+      {t:"More tourists ___ (expect) to visit next year.", a:["are expected"]},
+      {t:"It ___ (say) that Samarkand is over 2,500 years old.", a:["is said"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"This book ___ in 1999.", o:["was written","was wrote"], a:0},
+      {q:"English ___ all over the world.", o:["is spoken","speaks"], a:0},
+      {q:"It ___ that sugar is bad for you.", o:["is believed","believes"], a:0},
+      {q:"The car ___ yet.", o:["hasn’t been repaired","hasn’t repaired"], a:0},
+      {q:"Smoking should ___ in public places.", o:["be banned","banned"], a:0},
+      {q:"Which is correct?", o:["The letter was sent yesterday.","The letter sent yesterday."], a:0},
+      {q:"The project ___ next year.", o:["will be finished","will finished"], a:0},
+      {q:"The film was directed ___ a famous director.", o:["by","from"], a:0},
+      {q:"He is thought ___ very rich.", o:["to be","being"], a:0}],
+    jumble:["It is believed that exercise improves memory","The museum was built in 1970","Plastic bags should be banned","A new school has been opened"] },
+  { type:"reallife", title:"Use it in real life", sub:"News, facts and formal situations.",
+    replies:[
+      {who:"A tourist asks:", q:"“How old is this building?”", o:["It was built in the 16th century.","It built in the 16th century.","It was build in the 16th century."], a:0, why:"Was + built."},
+      {who:"Your manager asks:", q:"“Is the report ready?”", o:["Yes, it has been sent to the client.","Yes, it has sent to the client.","Yes, it has been send to the client."], a:0, why:"Has been + sent."},
+      {who:"In a discussion, you want to sound objective:", q:"(Choose the most academic sentence.)", o:["It is widely believed that technology makes life easier.","I believe technology makes life easier, I think.","People believes technology makes life easier."], a:0, why:"The impersonal passive sounds objective."}],
+    table:{ title:"News headlines", intro:"Turn each headline into a passive sentence.",
+      headers:["Headline","Start with…"],
+      rows:[["Government opens 20 new schools","20 new schools…"],["Police catch phone thieves","The phone thieves…"],["Scientists discover new plant in Uzbekistan","A new plant…"],["City will build new metro line","A new metro line…"],["People say coffee helps memory","It is said…"]],
+      placeholder:"20 new schools have been opened…", check:"Check: be + past participle, and by only when it’s important.",
+      model:"20 new schools have been opened by the government. The phone thieves were caught by the police. A new plant has been discovered in Uzbekistan. A new metro line will be built. It is said that coffee helps memory." },
+    builder:{ title:"An objective opinion", intro:"Topic: technology in education. Complete the paragraph.",
+      fields:[["It is often said that","technology makes learning easier"],["However, it is also believed that","students are distracted by phones"],["In many schools, tablets are","used in every lesson"],["In my opinion, phones should be","used only for learning"]],
+      template:"<mark>It is often said that</mark> {0}. However, <mark>it is also believed that</mark> {1}. In many schools, tablets <mark>are</mark> {2}. In my opinion, phones <mark>should be</mark> {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 3: discuss both sides. Prepare for a minute, then record yourself.", seconds:90,
+    formula:["It is often said that…","Facts in the passive","The other side","Your opinion"],
+    example:{ q:"“Fast food should be banned in schools.” Discuss.", a:"<mark>It is often said that</mark> fast food is one of the main causes of health problems in children. In some countries, fast food <mark>has already been banned</mark> in schools, and healthier meals <mark>are offered</mark> instead. <mark>It is believed that</mark> this improves students’ concentration. However, some people argue that children <mark>should be taught</mark> to make their own choices. In my opinion, fast food <mark>should be limited</mark>, but not banned completely." },
+    questions:["“Public transport should be free.” For: less traffic, cleaner air. Against: very expensive for the government. Discuss both sides.","“Plastic bags should be banned.” For: less pollution. Against: less convenient, costs for shops. Discuss both sides.","“Mobile phones should not be allowed in schools.” Discuss both sides and give your opinion."],
+    starters:["It is often said that…","It is widely believed that…","… should be banned / allowed","… has been introduced in…","It can be argued that…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"The museum was build in 1890.", wrong:[3], fix:"The museum was built in 1890."},
+      {s:"It believes that sport is healthy.", wrong:[1], fix:"It is believed that sport is healthy."},
+      {s:"Cars should not allowed in the centre.", wrong:[3], fix:"Cars should not be allowed in the centre."},
+      {s:"My wallet stole on the bus.", wrong:[2], fix:"My wallet was stolen on the bus."},
+      {s:"The new rule has been introduce.", wrong:[5], fix:"The new rule has been introduced."}],
+    checklist:["I used at least three passive forms.","I used “It is said / believed that…”.","I discussed both sides.","I gave my opinion.","I spoke for about 1.5 minutes."] }
+],
+
+/* ---------------- DAY 13 ---------------- */
+13: [
+  { type:"poll", title:"Imagine a different past", sub:"Tap your answer. Just imagine!",
+    options:["would have","wouldn’t have"],
+    items:[["If you had been born 100 years ago, would you have gone to university?","If I had been born 100 years ago, I {x} gone to university."],["If you had lived in Samarkand 600 years ago, would you have studied the stars?","If I had lived in Samarkand 600 years ago, I {x} studied the stars."],["If you had chosen a different subject at school, would you have chosen a different career?","If I had chosen a different subject, I {x} chosen a different career."],["If you hadn’t found this marathon, would you have studied grammar today?","If I hadn’t found this marathon, I {x} studied grammar today."]],
+    after:"That’s the third conditional: imagining a different past. It’s perfect for talking about regrets, lucky moments and life decisions. Real C1 grammar!" },
+  { type:"rule", title:"The rule, simply", sub:"Talking about a past that didn’t happen.", html:
+    box("When do we use it?", uses([["Third conditional: an imaginary past","If I had studied harder, I would have passed. (but I didn’t)"],["Regrets","I wish I had studied harder. If only I had listened!"],["Mixed: past → present result","If I had taken that job, I would live in Dubai now."]])) +
+    box("How do we make it?", tbl(["","if part","result part"],[["Third conditional","If + <span class='verb'>had + past participle</span><br>If I <span class='verb'>had known</span>,","<span class='verb'>would have + past participle</span><br>I <span class='verb'>would have called</span>."],["Mixed conditional","If + <span class='verb'>had + past participle</span><br>If I <span class='verb'>had moved</span> to Seoul,","<span class='verb'>would + verb</span> (now)<br>I <span class='verb'>would speak</span> Korean now."]]) +
+      `<p>Also: <em>could have</em> / <em>might have</em>: <em>If we had left earlier, we <mark>might have caught</mark> the train.</em></p>`) +
+    box("In speaking", `<p><em>If I’d known…</em> = If I had known. <em>I’d have…</em> = I would have. In fast speech: <em>would’ve</em>.</p><p><strong>I wish / If only</strong> + had + past participle: <em>I wish I <mark>had travelled</mark> more.</em></p>` + tip("when you talk about an important decision in Part 2, use one third conditional and one mixed conditional. It shows C1 range.")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Even good students make these. Learn them now.",
+    items:[
+      {bad:"If I would have known, I would have told you.", good:"If I had known, I would have told you.", why:"No would in the if part."},
+      {bad:"If I had studied, I would passed.", good:"If I had studied, I would have passed.", why:"Would have + past participle."},
+      {bad:"If I had went to the party, …", good:"If I had gone to the party, …", why:"Had + past participle (gone)."},
+      {bad:"I wish I have studied more.", good:"I wish I had studied more.", why:"Past regret → I wish I had…"},
+      {bad:"If I had taken the job, I would have lived in Dubai now.", good:"If I had taken the job, I would live in Dubai now.", why:"Now → mixed conditional (would + verb)."},
+      {bad:"If she had came earlier, …", good:"If she had come earlier, …", why:"Come → had come."}],
+    test:[
+      {s:"If I had left earlier, I wouldn’t have missed the bus.", ok:true, why:"Right: third conditional."},
+      {s:"If he had saved money, he would be rich now.", ok:true, why:"Right: mixed conditional."},
+      {s:"If they would have called, I would have answered.", ok:false, why:"Wrong: If they had called…"},
+      {s:"I wish I had learn French.", ok:false, why:"Wrong: I wish I had learned French."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"After the exam with Shahzoda", lines:[
+      {who:"Shahzoda", t:"So, how was it? If you ___ more, would it have been easier?", o:["had studied","studied"], a:0},
+      {who:"You", t:"Definitely! If I had slept more, I ___ so tired.", o:["wouldn’t have been","wouldn’t be"], a:0},
+      {who:"Shahzoda", t:"I wish I ___ my answers in the reading part.", o:["had checked","checked"], a:0},
+      {who:"You", t:"Me too. If I had known the topic, I ___ prepared better.", o:["could have","could"], a:0},
+      {who:"Shahzoda", t:"Well, if we ___ this course, we wouldn’t be so confident now.", o:["hadn’t taken","didn’t take"], a:0},
+      {who:"You", t:"True! If only I ___ my phone at home that day 😄", o:["had left","left"], a:0}]},
+    text:{ title:"🍀 A lucky day", intro:"Aziz missed his bus, and his life changed. Write the correct form.", lines:[
+      {t:"If Aziz ___ (not / miss) his bus, he wouldn’t have met Lola.", a:["hadn't missed","had not missed"]},
+      {t:"If he had caught the bus, he ___ (not / go) into that café.", a:["wouldn't have gone","would not have gone"]},
+      {t:"If Lola ___ (not / drop) her book, they wouldn’t have started talking.", a:["hadn't dropped","had not dropped"]},
+      {t:"If they hadn’t met that day, they ___ (not / be) married now.", a:["wouldn't be","would not be"]},
+      {t:"Aziz says: “If I ___ (take) that bus, my life would be completely different now!”", a:["had taken","'d taken"]},
+      {t:"Lola sometimes says: “I wish I ___ (meet) you earlier!”", a:["had met","'d met"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"If I ___ earlier, I would have caught the train.", o:["had left","left"], a:0},
+      {q:"If she had studied, she ___ passed.", o:["would have","would"], a:0},
+      {q:"Which is correct?", o:["If I had known, I’d have helped.","If I would have known, I’d have helped."], a:0},
+      {q:"If I had taken that job, I ___ rich now.", o:["would be","would have been"], a:0},
+      {q:"I wish I ___ that.", o:["hadn’t said","didn’t say"], a:0},
+      {q:"If we ___ the map, we wouldn’t have got lost.", o:["had checked","checked"], a:0},
+      {q:"He would have come if you ___ him.", o:["had invited","would invite"], a:0},
+      {q:"Which is correct?", o:["If she had gone…","If she had went…"], a:0},
+      {q:"If I hadn’t met my teacher, I ___ English now.", o:["wouldn’t speak","wouldn’t have spoken"], a:0}],
+    jumble:["If I had known I would have come","I wish I had studied harder","If she had left earlier she would have arrived on time","If I had taken the job I would live in Dubai now"] },
+  { type:"reallife", title:"Use it in real life", sub:"Talking about luck, mistakes and life choices.",
+    replies:[
+      {who:"Your friend is upset:", q:"“I missed my flight!”", o:["Oh no! If you had left home earlier, you would have caught it.","Oh no! If you left earlier, you would catch it.","Oh no! If you would have left earlier, you caught it."], a:0, why:"Third conditional for the past."},
+      {who:"A colleague asks:", q:"“Do you regret not going to that conference?”", o:["Yes, I wish I had gone.","Yes, I wish I went.","Yes, I wish I have gone."], a:0, why:"Past regret → I wish I had + past participle."},
+      {who:"In a job interview:", q:"“Why did you choose teaching?”", o:["If I hadn’t had such a great English teacher, I wouldn’t be a teacher today.","If I didn’t have a great teacher, I wouldn’t have been a teacher today.","If I hadn’t a great teacher, I won’t be a teacher."], a:0, why:"Mixed: past cause → present result."}],
+    table:{ title:"What went wrong?", intro:"Write a conditional sentence for each. Careful: the last one needs a mixed conditional!",
+      headers:["What happened","Result"],
+      rows:[["Bobur didn’t set an alarm.","He was late for his exam."],["Nilufar forgot her umbrella.","She got wet."],["Javlon didn’t save his work.","He lost his project."],["Madina didn’t learn to drive.","She can’t drive to work now."]],
+      placeholder:"If Bobur had set an alarm,…", check:"Check: if + had + past participle, would have + past participle (or would + verb for now).",
+      model:"If Bobur had set an alarm, he wouldn’t have been late for his exam. If Nilufar hadn’t forgotten her umbrella, she wouldn’t have got wet. If Javlon had saved his work, he wouldn’t have lost his project. If Madina had learned to drive, she could drive to work now." },
+    builder:{ title:"My life decisions", intro:"Think about a good decision and a small regret. Complete the sentences.",
+      fields:[["If I hadn’t (a good decision)","started learning English"],["I wouldn’t (now)","have so many opportunities"],["I wish I had","travelled more as a student"],["If I had done that, I would have","seen more of the world"]],
+      template:"<mark>If I hadn’t</mark> {0}, I <mark>wouldn’t</mark> {1} now. One small regret: <mark>I wish I had</mark> {2}. If I had done that, I <mark>would have</mark> {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 2: talk about the past. Prepare for a minute, then record yourself.", seconds:60,
+    formula:["The event","What would have happened","How it affects you now","How you feel"],
+    example:{ q:"Talk about an important decision you made in the past.", a:"One of the most important decisions I’ve made was moving to Tashkent to study. <mark>If I hadn’t moved</mark>, I <mark>wouldn’t have met</mark> my best friends, and I <mark>wouldn’t have found</mark> my job. Honestly, <mark>if I had stayed</mark> in my hometown, I <mark>would</mark> probably <mark>be</mark> a completely different person now. Sometimes <mark>I wish I had</mark> visited my family more often, but overall I don’t regret it at all." },
+    questions:["Talk about an important decision you made in the past. What would have happened if you had decided differently?","Describe a time when you were lucky. What would have happened if things had been different?","Is there anything you wish you had done differently at school? Why?"],
+    starters:["If I hadn’t…, I wouldn’t have…","If I had…, I would… now.","I wish I had…","Looking back,…","If only I had…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"If I would have known, I’d have called.", wrong:[2,3], fix:"If I had known, I’d have called."},
+      {s:"If she had studied, she would passed.", wrong:[5,6], fix:"If she had studied, she would have passed."},
+      {s:"I wish I have listened to my mum.", wrong:[3], fix:"I wish I had listened to my mum."},
+      {s:"If we had went earlier, we’d have seen it.", wrong:[3], fix:"If we had gone earlier, we’d have seen it."},
+      {s:"If I had bought that flat, I would have lived there now.", wrong:[8,9], fix:"If I had bought that flat, I would live there now."}],
+    checklist:["I used if + had + past participle.","I used would have + past participle.","I used a mixed conditional or I wish I had.","I spoke for about 1 minute."] }
+],
+
+/* ---------------- DAY 14 ---------------- */
+14: [
+  { type:"poll", title:"City life", sub:"Tap your answer.",
+    options:["the traffic","the noise","the prices","the weather"],
+    items:[["What annoys you most in a big city?","What annoys me most is {x}."],["What would you change first in your city?","What I would change first is {x}."],["What do people complain about most?","What people complain about most is {x}."]],
+    after:"These are cleft sentences: “What annoys me most is…”. They put the important idea in the spotlight. They sound natural, confident and very C1." },
+  { type:"rule", title:"The rule, simply", sub:"Putting the important idea in the spotlight.", html:
+    box("Types of cleft sentences", uses([["What-cleft","What I need is a holiday."],["It-cleft","It was my mother who taught me to cook."],["Other useful ones","The reason why I study English is that… / All I want is…"]])) +
+    box("Normal → emphasis", tbl(["Normal","With emphasis"],[["I love the people.","<span class='verb'>What I love is</span> the people."],["My teacher inspired me.","<span class='verb'>It was</span> my teacher <span class='verb'>who</span> inspired me."],["We met in Bukhara.","<span class='verb'>It was</span> in Bukhara <span class='verb'>that</span> we met."],["I study English because I want to travel.","<span class='verb'>The reason why</span> I study English <span class='verb'>is that</span> I want to travel."],["I just want some sleep.","<span class='verb'>All I want is</span> some sleep."]])) +
+    box("The grammar", `<p><strong>What</strong> + subject + verb + <strong>is / was</strong> + the important part.</p><p><strong>It is / was</strong> + the important part + <strong>who / that</strong> + the rest.</p><p><strong>Actions:</strong> <em>What I did <mark>was call</mark> the police.</em></p>` + tip("start Part 2 or Part 3 with a cleft sentence: “What I find most interesting about this topic is…”")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Learn these, and your cleft sentences will sound natural.",
+    items:[
+      {bad:"What I love it is the food.", good:"What I love is the food.", why:"No extra it."},
+      {bad:"That I like most is the weather.", good:"What I like most is the weather.", why:"Start with what, not that."},
+      {bad:"It was my father which taught me.", good:"It was my father who taught me.", why:"People → who."},
+      {bad:"The reason is because I was tired.", good:"The reason is that I was tired.", why:"The reason… is that…"},
+      {bad:"It is in Tashkent where I live.", good:"It is in Tashkent that I live.", why:"It-clefts use that."},
+      {bad:"What did I do was call him.", good:"What I did was call him.", why:"Not a question: no did after what."}],
+    test:[
+      {s:"What I really need is more time.", ok:true, why:"Right: what-cleft."},
+      {s:"It was Ali who broke the window.", ok:true, why:"Right: it-cleft with who."},
+      {s:"The reason why I came is because I missed you.", ok:false, why:"Wrong: …is that I missed you."},
+      {s:"What I love it is the sea.", ok:false, why:"Wrong: What I love is the sea."}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"Talking about Bukhara with Dilshod", lines:[
+      {who:"Dilshod", t:"How was your trip? I heard it ___ your sister who planned it.", o:["was","is being"], a:0},
+      {who:"You", t:"Yes! ___ I loved most was the old city at night.", o:["What","That"], a:0},
+      {who:"Dilshod", t:"And was it the plov ___ you liked best?", o:["that","what"], a:0},
+      {who:"You", t:"No, it was the samsa ___ I couldn’t stop eating 😄", o:["that","what"], a:0},
+      {who:"Dilshod", t:"Haha! ___ I want now is a trip like that.", o:["All","All what"], a:0},
+      {who:"You", t:"The reason ___ I went was to relax, and it worked!", o:["why","because"], a:0}]},
+    text:{ title:"✨ Make it stronger", intro:"Complete the cleft sentences with one word.", lines:[
+      {t:"I need a long holiday. → ___ I need is a long holiday.", a:["what"]},
+      {t:"My grandmother taught me to cook. → It was my grandmother ___ taught me to cook.", a:["who","that"]},
+      {t:"We met in Samarkand. → It was in Samarkand ___ we met.", a:["that"]},
+      {t:"I love his honesty. → What I love about him ___ his honesty.", a:["is"]},
+      {t:"I only want some peace. → ___ I want is some peace.", a:["all"]},
+      {t:"I left because the job was boring. → The reason why I left ___ that the job was boring.", a:["was","is"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"___ I need is sleep.", o:["What","That"], a:0},
+      {q:"It was my brother ___ helped me.", o:["who","which"], a:0},
+      {q:"Which is correct?", o:["What I love is the sea.","What I love it is the sea."], a:0},
+      {q:"It was in Paris ___ they met.", o:["that","what"], a:0},
+      {q:"___ I want is a cup of tea.", o:["All","All what"], a:0},
+      {q:"The reason ___ I study English is my job.", o:["why","because"], a:0},
+      {q:"Which is correct?", o:["The reason is that I was tired.","The reason is because of I was tired."], a:0},
+      {q:"What I did ___ call my mum.", o:["was","did"], a:0},
+      {q:"What surprised me ___ the price.", o:["was","it was"], a:0}],
+    jumble:["What I love most is the food","It was my teacher who inspired me","All I want is some sleep","The reason why I study English is my job"] },
+  { type:"reallife", title:"Use it in real life", sub:"Sounding clear and confident in important moments.",
+    replies:[
+      {who:"At a job interview:", q:"“Why do you want this job?”", o:["What attracts me most is the chance to grow.","What attracts me most it is the chance to grow.","That attracts me most is the chance to grow."], a:0, why:"What + clause + is…"},
+      {who:"Your friend says:", q:"“You look stressed. What’s wrong?”", o:["What I really need is a weekend off.","What do I really need is a weekend off.","I really need is a weekend off."], a:0, why:"No question word order."},
+      {who:"Someone thanks you for a gift, but your sister chose it:", q:"(Choose the best reply.)", o:["Actually, it was my sister who chose it!","Actually, it was my sister which chose it!","Actually, was my sister who chose it!"], a:0, why:"It was + person + who…"}],
+    table:{ title:"Rewrite with emphasis", intro:"Rewrite each sentence as a cleft sentence. Use the beginning given.",
+      headers:["Normal sentence","Start with…"],
+      rows:[["I love the atmosphere in Bukhara.","What I love…"],["My uncle inspired me to become a doctor.","It was…"],["I need more practice.","What I need…"],["I study English because I want to work abroad.","The reason why…"],["I just want a quiet evening.","All I want…"]],
+      placeholder:"What I love about Bukhara is…", check:"Check: no extra it, and The reason why… is that…",
+      model:"What I love about Bukhara is the atmosphere. It was my uncle who inspired me to become a doctor. What I need is more practice. The reason why I study English is that I want to work abroad. All I want is a quiet evening." },
+    builder:{ title:"Your strong opinion", intro:"Complete the sentences, then press the button.",
+      fields:[["What I love most about my country is","the hospitality"],["It was ___ who taught me","my grandfather"],["to…","respect others"],["What I would like to change is","the traffic in big cities"],["The reason why I’m learning English is that","I want to study abroad"]],
+      template:"<mark>What I love most</mark> about my country <mark>is</mark> {0}. <mark>It was</mark> {1} <mark>who</mark> taught me to {2}. <mark>What I would like to change is</mark> {3}. <mark>The reason why</mark> I’m learning English <mark>is that</mark> {4}." }},
+  { type:"speak", title:"Exam speaking", sub:"Parts 2 and 3: use cleft sentences to sound confident. Prepare for a minute, then record yourself.", seconds:90,
+    formula:["Start with a cleft","Main point","Example","Strong ending"],
+    example:{ q:"“Traditional food is more important than international food.” Discuss.", a:"<mark>What I find interesting about this topic is</mark> that food is part of our identity. On the one hand, traditional dishes like plov connect families and generations. <mark>It is</mark> our grandmothers <mark>who</mark> keep these recipes alive. On the other hand, international food gives young people new experiences. <mark>What worries me is</mark> that some young people only eat fast food. <mark>The reason why</mark> I prefer traditional food <mark>is that</mark> it’s healthier and full of meaning." },
+    questions:["Describe a person who changed your life. Use at least two cleft sentences.","“Young people should live with their parents until they marry.” Discuss both sides.","“Learning English is the most important skill today.” Do you agree? Why?"],
+    starters:["What I find interesting is…","What worries me is…","It was … who / that…","The reason why… is that…","All I want to say is…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"What I like it is the weather.", wrong:[3], fix:"What I like is the weather."},
+      {s:"It was my mum which helped me.", wrong:[4], fix:"It was my mum who helped me."},
+      {s:"The reason why I left is because I was bored.", wrong:[6], fix:"The reason why I left is that I was bored."},
+      {s:"What did I want was a rest.", wrong:[1,3], fix:"What I wanted was a rest."},
+      {s:"That I need is your help.", wrong:[0], fix:"What I need is your help."}],
+    checklist:["I used at least two what-clefts.","I used an it-cleft (It was … who / that…).","I used “The reason why… is that…”.","I spoke for about 1.5 minutes."] }
+],
+
+/* ---------------- DAY 15 ---------------- */
+15: [
+  { type:"poll", title:"The future: how sure are you?", sub:"Tap the answer that matches your opinion.",
+    options:["will definitely","will probably","might","probably won’t"],
+    items:[["Will AI replace teachers?","AI {x} replace teachers."],["Will cars drive themselves by 2050?","Cars {x} drive themselves by 2050."],["Will paper books disappear?","Paper books {x} disappear."],["Will English stay the world’s main language?","English {x} stay the world’s main language."]],
+    after:"Notice how “probably” and “might” sound softer than “definitely”? Good speakers don’t sound 100% sure about everything. That’s hedging, and it’s the last step to a C1 Part 3 answer." },
+  { type:"rule", title:"The rule, simply", sub:"Sounding careful, polite and academic.", html:
+    box("Why hedge?", uses([["Soften your opinion","I’d say… It seems to me that…"],["Don’t generalise","Many people tend to… (not: Everyone always…)"],["Disagree politely","I see your point, but… That’s true to some extent."]])) +
+    box("Too strong → softer", tbl(["Too strong","Softer"],[["Social media is bad.","Social media <span class='verb'>can be</span> harmful in some cases."],["Everyone uses phones too much.","Many people <span class='verb'>tend to</span> use phones too much."],["You are wrong.","I see your point, but I’m not sure I agree."],["This will happen.","This <span class='verb'>is likely to</span> happen. / This will <span class='verb'>probably</span> happen."]])) +
+    box("Your hedging toolbox", tbl(["Type","Examples"],[["Verbs","seem to, appear to, tend to, suggest"],["Modals","may, might, could, can"],["Adverbs","probably, perhaps, generally, to some extent"],["Phrases","I’d say…, It could be argued that…, As far as I know…, In my experience…"]]) +
+      `<p><strong>Grammar:</strong> <em>tend <mark>to</mark> + verb</em>, <em>seem <mark>to</mark> + verb</em>, <em>be likely <mark>to</mark> + verb</em>, <em>It seems <mark>to me</mark> that…</em></p>` + tip("C1 speakers sound balanced. Use 3–4 hedges in Part 3, but don’t hedge every sentence, or you’ll sound unsure.")) },
+  { type:"mistakes", title:"Common mistakes", sub:"Very common, even at high levels.",
+    items:[
+      {bad:"People tend use phones a lot.", good:"People tend to use phones a lot.", why:"Tend to + verb."},
+      {bad:"It seems me that prices are rising.", good:"It seems to me that prices are rising.", why:"It seems to me."},
+      {bad:"I am agree with you.", good:"I agree with you.", why:"Agree is a verb. No am."},
+      {bad:"Prices are likely increase.", good:"Prices are likely to increase.", why:"Likely to + verb."},
+      {bad:"According to me, homework is useless.", good:"In my opinion, homework isn’t always useful.", why:"Use “according to” for other people, not yourself."},
+      {bad:"It can be argued what technology helps.", good:"It could be argued that technology helps.", why:"Argued that…"}],
+    test:[
+      {s:"Young people tend to spend a lot of time online.", ok:true, why:"Right: tend to + verb."},
+      {s:"It seems that the problem is getting worse.", ok:true, why:"Right: a careful statement."},
+      {s:"I am agree that education is important.", ok:false, why:"Wrong: I agree that…"},
+      {s:"Technology is likely change our jobs.", ok:false, why:"Wrong: Technology is likely to change…"}]},
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"A polite discussion with your colleague Zafar", lines:[
+      {who:"Zafar", t:"Remote work is always better than working in an office. Don’t you think?"},
+      {who:"You", t:"I see your ___, but I’m not sure I agree.", o:["point","idea is"], a:0},
+      {who:"You", t:"People who work from home ___ feel lonely sometimes.", o:["tend to","tend"], a:0},
+      {who:"You", t:"And it ___ to me that teamwork is easier in an office.", o:["seems","seem"], a:0},
+      {who:"Zafar", t:"Hmm, that’s true to some ___.", o:["extent","part"], a:0},
+      {who:"You", t:"So I’d ___ a mix of both is probably the best option.", o:["say","said"], a:0}]},
+    text:{ title:"🕊️ Soften the opinion", intro:"Make each sentence more careful and polite. Write one word.", lines:[
+      {t:"Students are lazy. → Some students ___ to be less motivated.", a:["tend","seem","appear"]},
+      {t:"This is true. → This ___ be true in some cases.", a:["may","might","could","can"]},
+      {t:"Prices will rise. → Prices are ___ to rise.", a:["likely"]},
+      {t:"You’re wrong. → I see your ___, but I’m not sure.", a:["point"]},
+      {t:"Technology is bad for children. → It ___ be argued that technology can harm children.", a:["could","can","might"]},
+      {t:"Everyone loves football. → ___ people love football.", a:["many","most"]}]}},
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"People ___ to eat more fast food today.", o:["tend","tends"], a:0},
+      {q:"It seems ___ me that…", o:["to","for"], a:0},
+      {q:"Which is correct?", o:["I agree with you.","I am agree with you."], a:0},
+      {q:"Prices are likely ___ rise.", o:["to","for"], a:0},
+      {q:"Which is more polite?", o:["I’m not sure I agree.","You’re completely wrong."], a:0},
+      {q:"Which is correct?", o:["In my opinion, …","According to me, …"], a:0},
+      {q:"It ___ be argued that cities are too crowded.", o:["could","must to"], a:0},
+      {q:"This ___ suggest that the problem is serious.", o:["may","may to"], a:0},
+      {q:"Which is more careful?", o:["Many people prefer online shopping.","Everyone prefers online shopping."], a:0},
+      {q:"I’d ___ that it’s a good idea.", o:["say","to say"], a:0}],
+    jumble:["It seems to me that this is a good idea","Young people tend to use social media a lot","I see your point but I disagree","Prices are likely to rise next year"] },
+  { type:"reallife", title:"Use it in real life", sub:"Polite and professional English at work and with friends.",
+    replies:[
+      {who:"In a meeting, your manager suggests a plan you don’t like:", q:"(Choose the most professional reply.)", o:["That’s an interesting idea, but I’m not sure it will work for our clients.","This idea is bad.","According to me, this is wrong."], a:0, why:"Polite disagreement."},
+      {who:"A friend says:", q:"“All teenagers are addicted to their phones!”", o:["Well, many teenagers do tend to use phones a lot, but not all of them.","Yes, all of them are addicted.","You are wrong, I am disagree."], a:0, why:"Avoid generalising: many… tend to…"},
+      {who:"A teacher asks:", q:"“Will online learning replace schools?”", o:["It’s possible, but I’d say schools are likely to stay important.","Online learning will definitely 100% replace schools.","I am think no."], a:0, why:"A careful, balanced answer."}],
+    table:{ title:"Make it softer", intro:"Rewrite each strong sentence. Use the beginning given.",
+      headers:["Too strong","Start with…"],
+      rows:[["Social media destroys friendships.","It could be argued that…"],["All young people want to leave villages.","Many young people tend to…"],["Exams are useless.","I’m not sure that…"],["Cars will disappear.","Cars might…"],["Your idea is wrong.","I see your point, but…"]],
+      placeholder:"It could be argued that…", check:"Check: tend to + verb, might + verb, and no “I am agree”.",
+      model:"It could be argued that social media can damage some friendships. Many young people tend to move from villages to cities. I’m not sure that exams are always useful. Cars might become less common in the future. I see your point, but I’m not sure I agree." },
+    builder:{ title:"A balanced C1 opinion", intro:"Topic: “Artificial intelligence is good for education.” Complete the paragraph.",
+      fields:[["It seems to me that AI","can help students learn faster"],["However, students may","become too dependent on it"],["Many teachers tend to","worry about cheating"],["Overall, I’d say that","AI is useful if we use it wisely"]],
+      template:"<mark>It seems to me that</mark> AI {0}. However, students <mark>may</mark> {1}. Many teachers <mark>tend to</mark> {2}. Overall, <mark>I’d say that</mark> {3}." }},
+  { type:"speak", title:"Exam speaking", sub:"Part 3: your final challenge! Prepare for a minute, then record yourself.", seconds:90,
+    formula:["Soft opinion (I’d say…)","Point + example","Polite contrast","Balanced conclusion"],
+    example:{ q:"“The internet has made people less social.” Discuss.", a:"<mark>I’d say</mark> this is true <mark>to some extent</mark>. Many people <mark>tend to</mark> spend hours on their phones, even when they’re with friends. <mark>It could be argued that</mark> this <mark>may</mark> weaken real relationships. However, <mark>it seems to me that</mark> the internet also helps people stay in touch with relatives abroad. So overall, the internet <mark>probably</mark> hasn’t made us less social. It has just changed the way we communicate." },
+    questions:["“Robots will do most jobs in the future.” Discuss both sides.","“Children learn more from the internet than from school.” Do you agree?","“Money is the most important thing when choosing a job.” Discuss both sides and give your opinion."],
+    starters:["I’d say…","It seems to me that…","…tend to…","It could be argued that…","I see your point, but…","To some extent…"] },
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"I am agree with this idea.", wrong:[1], fix:"I agree with this idea."},
+      {s:"Young people tend spend a lot of money.", wrong:[2,3], fix:"Young people tend to spend a lot of money."},
+      {s:"According to me, homework is useless.", wrong:[0,1,2], fix:"In my opinion, homework isn’t always useful."},
+      {s:"It seems me that prices are rising.", wrong:[2], fix:"It seems to me that prices are rising."},
+      {s:"Prices are likely increase next year.", wrong:[3], fix:"Prices are likely to increase next year."}],
+    checklist:["I used at least three hedging phrases (I’d say, tend to, it seems…).","I avoided words like “everyone” and “always”.","I disagreed politely.","I gave a balanced conclusion.","I spoke for about 1.5 minutes."] }
 ]
 };
 
@@ -628,7 +1713,7 @@ const RENDER = {
         if (Object.keys(picked).length === s.items.length){
           const out = $("#pollOut");
           out.innerHTML = `<p><strong>Your answers as sentences:</strong></p>` +
-            s.items.map((it, i) => `<p style="margin:4px 0">I <mark>${picked[i]}</mark> ${it[1]}.</p>`).join("") +
+            s.items.map((it, i) => `<p style="margin:4px 0">${it[1].replace("{x}", `<mark>${picked[i]}</mark>`)}</p>`).join("") +
             `<p style="margin-top:12px">${s.after}</p>`;
           out.hidden = false;
         }
@@ -644,9 +1729,9 @@ const RENDER = {
   practice: {
     html: s => `<div class="box"><p class="q">💬 ${s.chat.title}</p><div class="chat">${s.chat.lines.map((l, i) => {
           const fid = "fill" + i;
-          return `<div class="bubble ${l.who === "You" ? "me" : ""}"><small>${l.who}</small><p>${l.t.replace("___", `<span class="blank" id="${fid}">___</span>`)}</p>${choiceHTML(l.o, l.a, "", fid)}</div>`;
+          return `<div class="bubble ${l.who === "You" ? "me" : ""}"><small>${l.who}</small><p>${l.t.replace("___", `<span class="blank" id="${fid}">___</span>`)}</p>${l.o ? choiceHTML(l.o, l.a, "", fid) : ""}</div>`;
         }).join("")}</div></div>
-      <div class="box"><p class="q">🚕 ${s.text.title}</p><p class="note">${s.text.intro}</p>
+      <div class="box"><p class="q">${s.text.title}</p><p class="note">${s.text.intro}</p>
         ${s.text.lines.map((l, i) => `<div class="qblock gapline" data-g="${i}">${i + 1}. ${l.t.replace("___", `<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Answer ${i + 1}">`)}<div class="fb"></div></div>`).join("")}
         <button class="btn" id="gapCheck" style="margin-top:12px">Check answers</button> <span class="score" id="gapScore"></span></div>`,
     setup: s => {
@@ -671,37 +1756,30 @@ const RENDER = {
   },
   reallife: {
     html: s => {
-      const p = s.planner;
+      const t = s.table, b = s.builder;
       return `<div class="box"><p class="q">1. What do you say?</p>${s.replies.map(r =>
           `<div class="qblock"><p class="note" style="margin:0">${r.who}</p><p class="q">${r.q}</p>${choiceHTML(r.o, r.a, r.why)}</div>`).join("")}</div>
-        <div class="box"><p class="q">2. ${p.person}’s week</p><p class="note">Look at ${p.person}’s planner. Write 3 or 4 sentences about her. Use always, often, sometimes, never, or once / twice / three times a week.</p>
-          <div class="table-wrap"><table class="planner"><tr><th></th>${p.days.map(d => `<th>${d}</th>`).join("")}</tr>
-          ${p.rows.map(r => `<tr><td>${r[0]}</td>${r[1].map(x => `<td>${x ? "✓" : ""}</td>`).join("")}</tr>`).join("")}</table></div>
-          <textarea id="plannerText" rows="4" placeholder="${p.person} always…"></textarea>
-          <p class="note">Check before you look: did you add -s? (She reads, she goes, she watches…)</p>
+        <div class="box"><p class="q">2. ${t.title}</p><p class="note">${t.intro}</p>
+          <div class="table-wrap"><table class="planner"><tr>${t.headers.map(x => `<th>${x}</th>`).join("")}</tr>
+          ${t.rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join("")}</tr>`).join("")}</table></div>
+          <textarea id="plannerText" rows="4" placeholder="${t.placeholder}"></textarea>
+          <p class="note">${t.check}</p>
           <button class="btn ghost" id="modelBtn">Compare with a model answer</button>
-          <div class="reveal" id="modelOut" hidden>${p.model}</div></div>
-        <div class="box"><p class="q">3. Your “About me” profile</p><p class="note">Imagine a language exchange app. Complete your profile, then press the button.</p>
-          <div class="form">
-            <label>My name is <input id="pf0" placeholder="Shirin"></label>
-            <label>I live in <input id="pf1" placeholder="Tashkent"></label>
-            <label>On weekdays, I usually <input id="pf2" placeholder="go to work by metro"></label>
-            <label>In my free time, I often <input id="pf3" placeholder="read books"></label>
-            <label>Once a week, I <input id="pf4" placeholder="visit my parents"></label>
-            <label>I never <input id="pf5" placeholder="eat fast food"></label>
-          </div>
-          <button class="btn" id="profileBtn">Make my profile</button>
+          <div class="reveal" id="modelOut" hidden>${t.model}</div></div>
+        <div class="box"><p class="q">3. ${b.title}</p><p class="note">${b.intro}</p>
+          <div class="form">${b.fields.map((f, i) => `<label>${f[0]} <input id="pf${i}" placeholder="${f[1]}"></label>`).join("")}</div>
+          <button class="btn" id="profileBtn">Make my card</button>
           <div id="profileOut"></div></div>`;
     },
     setup: s => {
+      const b = s.builder;
       $("#modelBtn").onclick = () => { $("#modelOut").hidden = false; };
       $("#profileBtn").onclick = () => {
-        const v = [0,1,2,3,4,5].map(i => $("#pf" + i).value.trim().replace(/[<>]/g, ""));
-        if (v.slice(2).some(x => !x)){ $("#profileOut").innerHTML = `<p class="fb no">Complete all the sentences first.</p>`; return; }
-        $("#profileOut").innerHTML = `<div class="profile"><div class="pic">${(v[0] || "?")[0].toUpperCase()}</div><div>
-          <strong>${v[0] || "Me"}</strong><small>${v[1] || ""}</small>
-          <p>On weekdays, I <mark>usually</mark> ${v[2]}. In my free time, I <mark>often</mark> ${v[3]}. <mark>Once a week</mark>, I ${v[4]}. I <mark>never</mark> ${v[5]}.</p></div></div>
-          <p class="note">Read it aloud. This is a great start for a Part 1.1 answer!</p>`;
+        const v = b.fields.map((f, i) => $("#pf" + i).value.trim().replace(/[<>]/g, ""));
+        if (v.some(x => !x)){ $("#profileOut").innerHTML = `<p class="fb no">Complete all the sentences first.</p>`; return; }
+        const text = b.template.replace(/\{(\d)\}/g, (m, n) => v[+n]);
+        $("#profileOut").innerHTML = `<div class="profile"><div class="pic">✍️</div><div><strong>My card</strong><p>${text}</p></div></div>
+          <p class="note">Read it aloud. You can use these sentences in your speaking answer!</p>`;
       };
     }
   },
@@ -710,8 +1788,8 @@ const RENDER = {
         <ul class="starters">${s.starters.map(x => `<li>${x}</li>`).join("")}</ul>
         <details><summary>See an example answer</summary><p class="q" style="margin-top:10px">${s.example.q}</p><p class="answer">${s.example.a}</p></details></div>
       <div class="box">${s.questions.map((q, i) => `<div class="qblock"><p class="q">${i + 1}. ${q}</p>
-        <div class="rec"><button class="btn" data-rec="${i}">● Record (30 s)</button><audio controls hidden id="a${i}"></audio></div><div class="note" id="m${i}"></div></div>`).join("")}</div>`,
-    setup: s => document.querySelectorAll("[data-rec]").forEach(b => b.onclick = () => toggleRecord(+b.dataset.rec, b))
+        <div class="rec"><button class="btn" data-rec="${i}" data-sec="${s.seconds || 30}">● Record (${s.seconds || 30} s)</button><audio controls hidden id="a${i}"></audio></div><div class="note" id="m${i}"></div></div>`).join("")}</div>`,
+    setup: s => document.querySelectorAll("[data-rec]").forEach(b => b.onclick = () => toggleRecord(+b.dataset.rec, b, +b.dataset.sec))
   },
   feedback: {
     html: s => `<div class="box">${s.errors.map((e, i) => `<div class="qblock"><div class="tapline" data-e="${i}">${e.s.split(" ").map((w, wi) => `<button class="tapword" data-w="${wi}">${w}</button>`).join("")}</div><div class="fb" id="ef${i}"></div></div>`).join("")}</div>
@@ -784,7 +1862,7 @@ function setupJumble(sentences){
 
 /* ---------- Voice recording ---------- */
 let rec = null, recTimer = null;
-async function toggleRecord(qi, btn){
+async function toggleRecord(qi, btn, sec){
   const msg = $("#m" + qi);
   if (rec && rec.state === "recording"){ stopRecording(); return; }
   if (!window.MediaRecorder || !navigator.mediaDevices){ msg.textContent = "Recording doesn’t work in this browser. Practise out loud, or use your phone’s voice recorder."; return; }
@@ -800,7 +1878,7 @@ async function toggleRecord(qi, btn){
     msg.textContent = "Listen to yourself. Did you use the winning formula?";
   };
   rec.start(); msg.textContent = "";
-  let left = 30; btn.classList.add("recording"); btn.textContent = `■ Stop (${left} s)`;
+  let left = sec || 30; btn.classList.add("recording"); btn.textContent = `■ Stop (${left} s)`;
   recTimer = setInterval(() => { left--; btn.textContent = `■ Stop (${left} s)`; if (left <= 0) stopRecording(); }, 1000);
 }
 function stopRecording(){ clearInterval(recTimer); if (rec && rec.state === "recording") rec.stop(); }
