@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grammar Speaking Marathon | Coach Shirin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#FAF3F4; --surface:#FFFFFF; --ink:#2A1219; --muted:#6E5560; --line:#EADCE0;
+  --mark:#F1D27A; --mark-ink:#2A1219;
+  --ok:#1F7A55; --ok-bg:#E3F5EC; --bad:#B3263E; --bad-bg:#FBE6EB;
+  --b1:#C0546F; --b2:#8E2440; --c1:#5A1530;
+  --accent:#7A1F35; --wine:#7A1F35; --on-wine:#FBEFF2;
+  --head:"Bricolage Grotesque", "Trebuchet MS", Arial, sans-serif;
+  --body:"Atkinson Hyperlegible", Verdana, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --paper:#170E12; --surface:#22151A; --ink:#F4E8EC; --muted:#C2A8B1; --line:#3A2630;
+    --mark:#E3BF5E; --mark-ink:#1A0E12;
+    --ok:#5FD39A; --ok-bg:#163326; --bad:#F07A95; --bad-bg:#3A1C26;
+    --b1:#F0A9B9; --b2:#D9657F; --c1:#B8435F;
+    --accent:#D9657F; --wine:#4A1424; --on-wine:#FBEFF2;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:800px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--head);line-height:1.15;margin:0}
+a{color:inherit}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+mark{background:var(--mark);color:var(--mark-ink);padding:0 .15em;border-radius:3px}
+.verb{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--accent)}
+.btn{background:var(--accent);color:var(--paper);border:0;border-radius:10px;padding:11px 20px;font-weight:700}
+.btn.ghost{background:none;color:var(--ink);border:2px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.box p:first-child{margin-top:0} .box p:last-child{margin-bottom:0}
+.note{color:var(--muted);font-size:.95rem}
+
+/* ---------- Home ---------- */
+.topbar{display:flex;align-items:center;gap:12px;padding:20px 0 0}
+.avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);flex:0 0 auto}
+.topbar small{display:block;color:var(--muted);font-size:.85rem;line-height:1.2}
+.topbar strong{font-family:var(--head);font-size:1.05rem}
+.hero{padding:28px 0 0}
+.hero h1{font-size:clamp(2.5rem,9vw,4.6rem);font-weight:800;letter-spacing:-.02em;color:var(--accent)}
+.hero .lead{color:var(--muted);max-width:34em;margin:14px 0 0;font-size:1.1rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font-family:var(--head);font-size:1.7rem;color:var(--accent);line-height:1.1}
+.stat span{font-size:.85rem;color:var(--muted)}
+.cta{margin-top:20px}
+
+.track{margin:28px 0 0;padding:22px 20px 16px;background:var(--wine);color:var(--on-wine);border-radius:18px}
+.track-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.track-head h2{font-size:1.4rem}
+.lane{position:relative;height:14px;border-radius:7px;background:rgba(255,255,255,.2);margin:46px 14px 10px}
+.lane .fill{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--mark);transition:width .9s ease}
+.cp{position:absolute;top:50%;width:3px;height:24px;transform:translate(-50%,-50%);background:var(--on-wine);opacity:.75;border-radius:2px}
+.runner{position:absolute;top:-38px;font-size:1.7rem;transform:translateX(-50%) scaleX(-1);transition:left .9s ease;line-height:1}
+.flag{position:absolute;right:-14px;top:-36px;font-size:1.5rem;line-height:1}
+.lane-labels{display:grid;grid-template-columns:5fr 6fr 4fr;margin:0 14px;font-size:.85rem;opacity:.9}
+.lane-labels span{padding-left:4px}
+
+.level{margin:44px 0 0}
+.level h2{font-size:1.5rem;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.level h2 span{font-family:var(--body);font-size:.95rem;color:var(--muted);font-weight:400}
+.path{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.path::before{content:"";position:absolute;left:21px;top:10px;bottom:10px;width:2px;background:var(--line)}
+.day-btn{position:relative;display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:none;border:0;padding:10px 0}
+.num{flex:0 0 44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-weight:700;background:var(--surface);border:2px solid var(--lv);color:var(--lv);z-index:1}
+.done .num{background:var(--lv);color:var(--surface)}
+.day-text{flex:1;min-width:0}
+.day-text strong{display:block;font-family:var(--head);font-size:1.12rem;font-weight:700}
+.day-text span{color:var(--muted);font-size:.95rem}
+.tag{flex:0 0 auto;font-size:.85rem;padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.free{background:var(--mark);border-color:var(--mark);color:var(--mark-ink);font-weight:700}
+.day-btn:hover .day-text strong{text-decoration:underline}
+.b1{--lv:var(--b1)} .b2{--lv:var(--b2)} .c1{--lv:var(--c1)}
+
+.about{margin:64px 0 0;max-width:720px}
+.about h2{font-size:2rem;color:var(--accent)}
+.about p{margin:14px 0 0}
+.creds{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.creds li{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:10px;padding:12px 14px}
+.creds strong{display:block;font-family:var(--head)}
+.creds span{color:var(--muted);font-size:.95rem}
+.inspire{margin:56px 0 0;background:var(--wine);color:var(--on-wine);border-radius:20px;padding:40px 28px}
+.inspire blockquote{margin:0;font-family:var(--head);font-weight:700;font-size:clamp(1.5rem,5vw,2.2rem);line-height:1.25;max-width:22em}
+.inspire p{margin:16px 0 0;opacity:.9;max-width:34em}
+
+.finishline{margin:56px 0 0}
+.finishline h2{font-size:2rem;color:var(--accent)}
+.cert{position:relative;margin-top:16px;background:var(--surface);border:6px double var(--accent);border-radius:8px;padding:34px 24px;text-align:center}
+.cert .t1{font-family:var(--head);font-size:.95rem;color:var(--muted)}
+.cert .t2{font-family:var(--head);font-size:clamp(1.6rem,5vw,2.2rem);font-weight:800;color:var(--accent);margin:6px 0 18px}
+.cert .who{font-family:var(--head);font-size:clamp(1.5rem,5vw,2rem);font-weight:700;border-bottom:2px solid var(--line);display:inline-block;min-width:60%;padding-bottom:4px}
+.cert p{margin:14px 0 0}
+.cert.locked > *:not(.lock){opacity:.25}
+.lock{position:absolute;inset:0;display:grid;place-items:center;padding:20px;font-weight:700;font-family:var(--head);font-size:1.15rem}
+.lock span{background:var(--surface);border:2px solid var(--accent);border-radius:12px;padding:12px 18px}
+.namefield{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.namefield input{flex:1;min-width:180px;font:inherit;padding:10px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+footer{margin:56px 0 40px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.95rem}
+
+/* ---------- Day page ---------- */
+.back{margin:20px 0 0;background:none;border:0;color:var(--muted);padding:6px 0;text-decoration:underline}
+.day-head{padding:14px 0 6px}
+.day-head .meta{color:var(--lv);font-weight:700}
+.day-head h1{font-size:clamp(1.9rem,7vw,2.8rem);font-weight:800;margin-top:4px}
+.day-head p{color:var(--muted);margin:6px 0 0}
+.stations{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 10px;margin:8px -2px 0;scrollbar-width:thin}
+.st{flex:0 0 auto;display:flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:99px;padding:5px 12px 5px 5px;font-size:.9rem;white-space:nowrap}
+.st b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--paper);font-family:var(--head)}
+.st.done b{background:var(--ok);color:var(--surface)}
+.st.cur{border-color:var(--accent)}
+.st.cur b{background:var(--accent);color:var(--paper)}
+.station{margin-top:10px}
+.station .kicker{color:var(--accent);font-weight:700;font-size:.95rem}
+.station h2{font-size:1.6rem;margin:2px 0 6px}
+.station .sub{color:var(--muted);margin:0 0 16px}
+.station .box + .box{margin-top:14px}
+.nav-row{display:flex;justify-content:space-between;gap:10px;margin:24px 0 0}
+.q{font-weight:700;margin:0 0 8px}
+.qblock{padding:14px 0;border-top:1px solid var(--line)}
+.qblock:first-child{border-top:0;padding-top:0}
+.qblock:last-child{padding-bottom:0}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:8px 14px;text-align:left}
+.choice.sel{border-color:var(--accent);background:var(--accent);color:var(--paper)}
+.choice.right{border-color:var(--ok);background:var(--ok-bg);color:var(--ink)}
+.choice.wrong{border-color:var(--bad);background:var(--bad-bg);color:var(--ink)}
+.fb{margin-top:6px;font-size:.95rem;min-height:0}
+.fb.ok{color:var(--ok)} .fb.no{color:var(--bad)}
+.reveal{margin-top:14px;padding:16px;border-radius:12px;background:var(--paper);border:1px dashed var(--accent)}
+.bigline{font-family:var(--head);font-size:clamp(1.25rem,4.5vw,1.55rem);font-weight:500;line-height:1.4;border-left:5px solid var(--accent);padding:4px 0 4px 14px;margin:0 0 14px}
+.answer{font-size:1.1rem;line-height:1.8}
+.listen{margin-bottom:12px}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:420px;margin:12px 0}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface);font-family:var(--head)}
+.scale{display:grid;gap:6px;margin:12px 0}
+.scale div{display:flex;align-items:center;gap:10px}
+.scale i{display:block;height:12px;border-radius:6px;background:var(--accent)}
+.scale span{flex:0 0 8em}
+.tip{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--surface);border:2px solid var(--mark)}
+.word{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.word .w{font-family:var(--head);font-size:1.25rem;font-weight:700;min-width:5.5em}
+.sound{background:none;border:2px solid var(--line);border-radius:50%;width:38px;height:38px}
+details{margin-top:12px} summary{cursor:pointer;font-weight:700;color:var(--accent)}
+.clock-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:700}
+.timer{font-family:var(--head);font-size:1.6rem;color:var(--accent)}
+.clock-q{font-family:var(--head);font-size:1.3rem;margin:6px 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;min-height:46px}
+.chip{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:6px 12px}
+.built{border:2px dashed var(--line);border-radius:10px;padding:8px;margin:8px 0}
+.built .chip{background:var(--surface);border-color:var(--accent)}
+.tapline{display:flex;flex-wrap:wrap;gap:6px}
+.tapword{background:var(--paper);border:2px solid var(--line);border-radius:8px;padding:5px 10px}
+.tapword.right{background:var(--bad-bg);border-color:var(--bad);text-decoration:line-through}
+.tapword.nope{border-color:var(--muted);opacity:.6}
+.rec{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px}
+.rec .btn.recording{background:var(--bad)}
+.rec audio{max-width:100%}
+.starters{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0;padding:0;list-style:none}
+.starters li{background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:.95rem}
+.check label{display:flex;gap:10px;padding:6px 0;cursor:pointer}
+.formula{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.formula span{background:var(--wine);color:var(--on-wine);border-radius:8px;padding:6px 12px;font-weight:700}
+
+.uses{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.uses div{background:var(--paper);border-radius:10px;padding:12px;border-left:4px solid var(--accent)}
+.uses strong{display:block;font-family:var(--head)}
+.uses span{font-style:italic}
+.mlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.mcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.mcard p{margin:0}
+.mcard .bad{color:var(--bad);text-decoration:line-through;text-decoration-thickness:1px}
+.mcard .good{color:var(--ok);font-weight:700;margin-top:4px}
+.mcard .why{color:var(--muted);font-size:.92rem;margin-top:6px}
+.chat{display:flex;flex-direction:column;gap:12px}
+.bubble{max-width:88%;background:var(--paper);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 14px}
+.bubble.me{align-self:flex-end;border-radius:16px 16px 4px 16px;border-color:var(--accent)}
+.bubble small{color:var(--muted);font-weight:700}
+.bubble p{margin:2px 0 8px}
+.blank{font-weight:700;color:var(--accent)}
+.gapline input,.form input,textarea{font:inherit;padding:5px 8px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.gapline input{width:9.5em}
+.gapline input.ok{border-color:var(--ok)} .gapline input.no{border-color:var(--bad)}
+.score{margin-left:10px;font-weight:700}
+textarea{width:100%;margin:12px 0 6px}
+.planner{min-width:480px} .planner td,.planner th{text-align:center} .planner td:first-child{text-align:left}
+.form{display:grid;gap:10px;margin:10px 0 14px}
+.form label{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.form input{flex:1;min-width:160px}
+.profile{display:flex;gap:14px;margin-top:14px;padding:16px;border-radius:14px;background:var(--wine);color:var(--on-wine)}
+.profile .pic{flex:0 0 52px;height:52px;border-radius:50%;background:var(--mark);color:var(--mark-ink);display:grid;place-items:center;font-family:var(--head);font-weight:800;font-size:1.4rem}
+.profile strong{font-family:var(--head);font-size:1.15rem}
+.profile small{display:block;opacity:.85}
+.profile p{margin:8px 0 0}
+
+/* ---------- Modal ---------- */
+.modal{position:fixed;inset:0;background:rgba(20,6,12,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+.modal.open{display:flex}
+.modal .box{max-width:420px;width:100%}
+.modal h2{font-size:1.5rem;margin-bottom:8px}
+.modal input{font:inherit;width:100%;padding:10px;margin:12px 0 6px;border:2px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.modal .row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.err{color:var(--bad);font-size:.95rem;min-height:1.4em}
+.medal{font-size:3rem;line-height:1}
+@media (max-width:540px){ body{font-size:16px} .tag{font-size:.8rem;padding:2px 8px} .stat b{font-size:1.4rem} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="box" id="modalBox"></div></div>
+
+<script>
+/* =========================================================
+   SETTINGS: you can change these lines
+   ========================================================= */
+const CONFIG = {
+  accessCode: "SPEAK2026",        // the code you give to paying students
+  telegram: "cefrwithshirin",     // your Telegram username (without @)
+  coach: "Shirin Ishbekova"
+};
+const AVATAR = "data:image/jpeg;base64,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";
+
+/* ===================== COURSE MAP ===================== */
+const TOTAL_KM = 42.2;
+const STATIONS = ["Warm-up","The rule","Common mistakes","Practice","Game time","Real life","Exam speaking","Final check"];
+const DAYS = [
+  {n:1, lv:"b1", grammar:"Present simple + how often", use:"Talking about your habits", part:"Part 1.1", free:true},
+  {n:2, lv:"b1", grammar:"Present perfect vs past simple", use:"Talking about experiences", part:"Part 1.1"},
+  {n:3, lv:"b1", grammar:"Used to and would", use:"Saying how things have changed", part:"Part 1.1"},
+  {n:4, lv:"b1", grammar:"Comparatives and superlatives", use:"Comparing two pictures", part:"Part 1.2"},
+  {n:5, lv:"b1", grammar:"Present continuous, there is / there are", use:"Describing what you see", part:"Part 1.2"},
+  {n:6, lv:"b2", grammar:"Modals of speculation", use:"Guessing about a picture", part:"Part 1.2"},
+  {n:7, lv:"b2", grammar:"Future forms", use:"Talking about plans and predictions", part:"Part 2"},
+  {n:8, lv:"b2", grammar:"First and second conditionals", use:"Answering “what if” questions", part:"Part 2"},
+  {n:9, lv:"b2", grammar:"Gerunds and infinitives", use:"Talking about likes and preferences", part:"Part 1.1"},
+  {n:10, lv:"b2", grammar:"Relative clauses", use:"Adding detail to your answer", part:"Part 2"},
+  {n:11, lv:"b2", grammar:"Linkers of contrast", use:"Showing both sides", part:"Part 3"},
+  {n:12, lv:"c1", grammar:"Passive and “It is believed that…”", use:"Sounding objective", part:"Part 3"},
+  {n:13, lv:"c1", grammar:"Third and mixed conditionals", use:"Talking about the past and regrets", part:"Part 2"},
+  {n:14, lv:"c1", grammar:"Cleft sentences", use:"Emphasising your main point", part:"Parts 2 and 3"},
+  {n:15, lv:"c1", grammar:"Hedging and softening", use:"Giving opinions politely", part:"Part 3"}
+];
+const LEVELS = { b1:["Stage 1: B1","days 1 to 5"], b2:["Stage 2: B2","days 6 to 11"], c1:["Stage 3: C1","days 12 to 15"] };
+
+/* ===================== DAY CONTENT ===================== */
+const CONTENT = {
+1: [
+  { type:"poll", title:"How often do you…?", sub:"Tap your answer. There are no wrong answers here.",
+    options:["always","usually","sometimes","never"],
+    items:[["How often do you drink tea?","drink tea"],["How often do you read in English?","read in English"],["How often do you speak English outside class?","speak English outside class"],["How often do you go to bed after midnight?","go to bed after midnight"]],
+    after:"These words (always, usually, never…) and this tense are today’s grammar. You use them every day, and in Part 1.1 the examiner asks about your habits all the time." },
+
+  { type:"rule", title:"The rule, simply", sub:"Read this first. Everything else today uses it.", html:`
+    <div class="box"><p class="q">When do we use the present simple?</p>
+      <div class="uses">
+        <div><strong>Habits and routines</strong><span>I drink tea every morning.</span></div>
+        <div><strong>Facts about your life</strong><span>My sister lives in Samarkand.</span></div>
+        <div><strong>How often you do things</strong><span>I sometimes cook dinner.</span></div>
+      </div></div>
+    <div class="box"><p class="q">How do we make it?</p>
+      <div class="table-wrap"><table>
+        <tr><th></th><th>I / you / we / they</th><th>he / she / it</th></tr>
+        <tr><td>✓ Positive</td><td>I <span class="verb">work</span>.</td><td>She <span class="verb">works</span>.</td></tr>
+        <tr><td>✗ Negative</td><td>I <span class="verb">don’t work</span>.</td><td>She <span class="verb">doesn’t work</span>.</td></tr>
+        <tr><td>? Question</td><td><span class="verb">Do</span> you <span class="verb">work</span>?</td><td><span class="verb">Does</span> she <span class="verb">work</span>?</td></tr>
+      </table></div>
+      <p><strong>Remember:</strong> he / she / it = add <strong>-s</strong>. But after <em>doesn’t</em> and <em>does</em>, no -s: <em>She doesn’t work.</em></p></div>
+    <div class="box"><p class="q">Spelling with he / she / it</p>
+      <div class="table-wrap"><table>
+        <tr><th>Rule</th><th>Examples</th></tr>
+        <tr><td>Most verbs: + s</td><td>work → works, read → reads</td></tr>
+        <tr><td>-ch, -sh, -s, -x, -o: + es</td><td>watch → watches, go → goes</td></tr>
+        <tr><td>consonant + y: y → ies</td><td>study → studies</td></tr>
+        <tr><td>Special</td><td>have → has</td></tr>
+      </table></div></div>
+    <div class="box"><p class="q">How often? Frequency words</p>
+      <div class="scale">
+        <div><span>always</span><i style="width:100%"></i></div>
+        <div><span>usually</span><i style="width:85%"></i></div>
+        <div><span>often</span><i style="width:65%"></i></div>
+        <div><span>sometimes</span><i style="width:45%"></i></div>
+        <div><span>rarely / hardly ever</span><i style="width:15%"></i></div>
+        <div><span>never</span><i style="width:2%"></i></div>
+      </div>
+      <p><strong>Where do they go?</strong></p>
+      <p>Before the verb: I <mark>usually</mark> walk to work.<br>After <em>am / is / are</em>: I’m <mark>always</mark> busy.</p>
+      <p><strong>Time expressions</strong> go at the end: I go to the gym <mark>twice a week</mark>. (also: every day, once a month, on weekends)</p></div>` },
+
+  { type:"mistakes", title:"Common mistakes", sub:"Students make these all the time. Learn them now, and you won’t make them in the exam.",
+    items:[
+      {bad:"He go to work by bus.", good:"He goes to work by bus.", why:"He / she / it needs -s."},
+      {bad:"She doesn’t likes coffee.", good:"She doesn’t like coffee.", why:"The -s is already in doesn’t. No -s on the verb."},
+      {bad:"I am usually wake up at 7.", good:"I usually wake up at 7.", why:"Don’t put am / is / are before a normal verb."},
+      {bad:"I go always to the gym.", good:"I always go to the gym.", why:"The frequency word goes before the verb."},
+      {bad:"Do she live near you?", good:"Does she live near you?", why:"He / she / it: use does in questions."},
+      {bad:"I every day play football.", good:"I play football every day.", why:"Time expressions go at the end."}
+    ],
+    test:[
+      {s:"My mother cook very well.", ok:false, why:"Wrong: My mother cooks very well."},
+      {s:"We never eat fast food.", ok:true, why:"Right: never goes before the verb."},
+      {s:"Does your brother works on Saturdays?", ok:false, why:"Wrong: Does your brother work…? (no -s after does)"},
+      {s:"I’m always tired on Mondays.", ok:true, why:"Right: always goes after am."},
+      {s:"She is usually goes to bed late.", ok:false, why:"Wrong: She usually goes to bed late. (no is)"}
+    ]},
+
+  { type:"practice", title:"Practice", sub:"Real-life situations. Choose or type the correct form.",
+    chat:{ title:"A chat with your friend Malika", lines:[
+      {who:"Malika", t:"Hi! What time ___ you usually finish work?", o:["do","does"], a:0},
+      {who:"You", t:"I usually ___ at 6. Why?", o:["finish","finishes"], a:0},
+      {who:"Malika", t:"I want to go to the gym. My sister ___ there twice a week.", o:["go","goes"], a:1},
+      {who:"You", t:"Great idea! I’m ___ free on Tuesdays.", o:["always","always am"], a:0},
+      {who:"Malika", t:"Perfect. But my sister ___ like early mornings.", o:["don’t","doesn’t"], a:1},
+      {who:"You", t:"Me neither! I ___ get up before 8 on weekends 😄", o:["never","ever"], a:0}
+    ]},
+    text:{ title:"A day in Rustam’s life", intro:"Rustam is a taxi driver in Tashkent. Write the verbs in the correct form.", lines:[
+      {t:"Rustam ___ (work) as a taxi driver.", a:["works"]},
+      {t:"He ___ (start) work at 7 every morning.", a:["starts"]},
+      {t:"He ___ (not / have) breakfast at home.", a:["doesn't have","does not have"]},
+      {t:"He usually ___ (buy) a samsa near the station.", a:["buys"]},
+      {t:"In the evening, he ___ (watch) football with his son.", a:["watches"]},
+      {t:"On Sundays, he ___ (not / work).", a:["doesn't work","does not work"]},
+      {t:"___ (he / like) his job? Yes, he loves it!", a:["does he like"]}
+    ]}},
+
+  { type:"games", title:"Game time", sub:"Two quick games. Beat your best score!",
+    clock:[
+      {q:"She ___ to music every evening.", o:["listen","listens"], a:1},
+      {q:"They ___ live in the city.", o:["don’t","doesn’t"], a:0},
+      {q:"___ your brother work on Saturdays?", o:["Do","Does"], a:1},
+      {q:"Which is correct?", o:["I am always late.","I always am late."], a:0},
+      {q:"My dad ___ coffee.", o:["never drinks","drinks never"], a:0},
+      {q:"He ___ a big family.", o:["has","have"], a:0},
+      {q:"My sister ___ English twice a week.", o:["studys","studies"], a:1},
+      {q:"We ___ go out on weekdays.", o:["hardly ever","ever hardly"], a:0},
+      {q:"Which is correct?", o:["She doesn’t likes tea.","She doesn’t like tea."], a:1},
+      {q:"I go to the gym ___.", o:["once a week","a week once"], a:0}
+    ],
+    jumble:["I usually walk to school","My brother is always busy","We go to the cinema once a month","She doesn’t often eat fast food"] },
+
+  { type:"reallife", title:"Use it in real life", sub:"This is how you really use the present simple outside the classroom.",
+    replies:[
+      {who:"Your new colleague asks:", q:"“What do you usually do for lunch?”", o:["I usually bring food from home.","I am usually bring food from home.","Usually I bringing food from home."], a:0, why:"Usually + verb, no am."},
+      {who:"Your doctor asks:", q:"“How often do you exercise?”", o:["I exercising three times a week.","I exercise about three times a week.","Three times week I exercises."], a:1, why:"I + verb + how often at the end."},
+      {who:"At a hotel, you ask the receptionist:", q:"(You want to know the breakfast time.)", o:["What time breakfast starts?","What time does breakfast starts?","What time does breakfast start?"], a:2, why:"Does + subject + verb with no -s."},
+      {who:"Your friend asks:", q:"“Does your brother still play football?”", o:["Yes, he play every Sunday.","Yes, he plays every Sunday.","Yes, he is play every Sunday."], a:1, why:"He + plays."}
+    ],
+    planner:{ person:"Dilnoza", days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], rows:[
+      ["read before bed",[1,1,1,1,1,1,1]],
+      ["go to the gym",[1,0,1,0,1,0,0]],
+      ["cook dinner",[0,0,0,0,0,1,0]],
+      ["visit her grandparents",[0,0,0,0,0,0,1]],
+      ["watch TV",[0,0,0,0,0,0,0]]],
+      model:"Dilnoza always reads before bed. She goes to the gym three times a week, on Monday, Wednesday and Friday. She cooks dinner once a week, on Saturday. She visits her grandparents every Sunday. She never watches TV." }},
+
+  { type:"speak", title:"Exam speaking", sub:"Now use it in the exam. Answer each question for about 30 seconds and record yourself.",
+    formula:["Answer","How often","Reason","Example"],
+    example:{ q:"What do you usually do at weekends?", a:"Well, I <mark>usually</mark> spend my weekends with my family. On Saturday mornings, I <mark>often</mark> help my mum with the cooking, because it’s the only time we cook together. I <mark>rarely</mark> stay at home all day, because I get bored quickly. And on Sundays I <mark>always</mark> go to bed early, so I’m ready for the new week." },
+    questions:["How do you usually spend your evenings?","How often do you use social media? Do you think it is a good habit?","What do you do when you feel stressed?"],
+    starters:["I usually…","Once a week, I…","I hardly ever… because…","On weekends, I often…","Sometimes I…"] },
+
+  { type:"feedback", title:"Final check", sub:"Each sentence has one mistake. Tap the wrong word.",
+    errors:[
+      {s:"My father drive to work every day.", wrong:[2], fix:"My father drives to work every day."},
+      {s:"Does your sister speaks French?", wrong:[3], fix:"Does your sister speak French?"},
+      {s:"We go often to the park.", wrong:[2], fix:"We often go to the park."},
+      {s:"He don’t have a car.", wrong:[1], fix:"He doesn’t have a car."},
+      {s:"I play every day football.", wrong:[2,3], fix:"I play football every day."},
+      {s:"I usually am tired after work.", wrong:[1,2], fix:"I’m usually tired after work."}
+    ],
+    checklist:["I used at least three frequency words.","I gave a reason with “because”.","I gave an example or a detail.","I remembered -s with he / she / it.","I spoke for about 30 seconds."] }
+]
+};
+
+/* ===================== SAVED PROGRESS ===================== */
+function load(k, f){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; }catch(e){ return f; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+let unlocked = load("gsm-unlocked", false);
+let progress = load("gsm-progress", {});      // { "1": [0,1,2] }
+let activeDates = load("gsm-dates", []);
+let certName = load("gsm-name", "");
+
+function dateKey(d){ return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate(); }
+function stationsDone(n){ return (progress[n] || []).length; }
+function dayFinished(n){ return stationsDone(n) >= STATIONS.length; }
+function finishedCount(){ return DAYS.filter(d => dayFinished(d.n)).length; }
+function kmRun(){ let s = 0; DAYS.forEach(d => s += stationsDone(d.n)); return s * TOTAL_KM / (DAYS.length * STATIONS.length); }
+function streak(){
+  const set = new Set(activeDates); const d = new Date(); let c = 0;
+  if (!set.has(dateKey(d))) d.setDate(d.getDate() - 1);
+  while (set.has(dateKey(d))){ c++; d.setDate(d.getDate() - 1); }
+  return c;
+}
+function markStation(n, i){
+  progress[n] = progress[n] || [];
+  if (!progress[n].includes(i)) progress[n].push(i);
+  const t = dateKey(new Date()); if (!activeDates.includes(t)) activeDates.push(t);
+  save("gsm-progress", progress); save("gsm-dates", activeDates);
+}
+
+const app = document.getElementById("app");
+const $ = s => document.querySelector(s);
+function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* ===================== HOME ===================== */
+function renderHome(){
+  const km = kmRun(), fin = finishedCount(), st = streak();
+  const pct = Math.min(100, km / TOTAL_KM * 100);
+  let html = `
+  <div class="topbar"><img class="avatar" src="${AVATAR}" alt="Coach Shirin"><div><small>Your coach</small><strong>${CONFIG.coach}</strong></div></div>
+  <header class="hero">
+    <h1>Grammar Speaking Marathon</h1>
+    <p class="lead">15 days, from B1 to C1. Every day: one grammar rule explained simply, lots of practice, real-life situations, common mistakes, and a CEFR Multilevel speaking task.</p>
+    <div class="stats">
+      <div class="stat"><b>${km.toFixed(1)}</b><span>of ${TOTAL_KM} km</span></div>
+      <div class="stat"><b>${st}</b><span>day streak</span></div>
+      <div class="stat"><b>${fin}</b><span>of 15 days</span></div>
+    </div>
+    <div class="cta"><button class="btn" id="go">${km > 0 ? "Continue running" : "Start Day 1 free"}</button></div>
+  </header>
+  <section class="track" aria-label="Your race">
+    <div class="track-head"><h2>Your race</h2><span>${km.toFixed(1)} of ${TOTAL_KM} km</span></div>
+    <div class="lane">
+      <div class="fill" style="width:${pct}%"></div>
+      <span class="cp" style="left:33.33%"></span><span class="cp" style="left:73.33%"></span>
+      <span class="runner" style="left:${Math.max(pct,1)}%" aria-hidden="true">🏃‍♀️</span><span class="flag" aria-hidden="true">🏁</span>
+    </div>
+    <div class="lane-labels"><span>B1</span><span>B2</span><span>C1</span></div>
+  </section>`;
+  ["b1","b2","c1"].forEach(lv => {
+    html += `<section class="level ${lv}"><h2>${LEVELS[lv][0]} <span>${LEVELS[lv][1]}</span></h2><ol class="path">`;
+    DAYS.filter(d => d.lv === lv).forEach(d => {
+      const done = dayFinished(d.n), sd = stationsDone(d.n);
+      let tag = "";
+      if (d.free && !sd) tag = `<span class="tag free">Free</span>`;
+      else if (!d.free && !unlocked) tag = `<span class="tag">🔒</span>`;
+      else if (sd && !done) tag = `<span class="tag">${sd} of 8</span>`;
+      html += `<li class="${done ? "done" : ""}"><button class="day-btn" data-day="${d.n}">
+        <span class="num" aria-hidden="true">${done ? "✓" : d.n}</span>
+        <span class="day-text"><strong>Day ${d.n}: ${d.grammar}</strong><span>${d.use}, ${d.part}</span></span>${tag}</button></li>`;
+    });
+    html += `</ol></section>`;
+  });
+  html += `
+  <section class="about">
+    <h2>Hi, I’m Shirin</h2>
+    <p>I’m an English teacher, and I prepare students for the CEFR Multilevel exam and IELTS. I teach live online lessons, so you can join from anywhere.</p>
+    <p>I made this marathon because many students know the grammar rules but don’t use them when they speak. Here, every rule goes straight into a speaking answer, so grammar becomes something you can actually hear.</p>
+    <ul class="creds">
+      <li><strong>Bachelor’s degree</strong><span>UzSWLU</span></li>
+      <li><strong>Master’s degree</strong><span>WIUT</span></li>
+      <li><strong>Studied in Europe</strong><span>International experience</span></li>
+      <li><strong>Exam preparation</strong><span>CEFR Multilevel and IELTS</span></li>
+    </ul>
+  </section>
+  <section class="inspire">
+    <blockquote>You don’t need perfect grammar to start speaking. You need to start speaking to make your grammar better.</blockquote>
+    <p>One structure a day. Fifteen days. 42.2 kilometres. By the finish line, you’ll hear the difference in your own voice.</p>
+  </section>
+  <section class="finishline">
+    <h2>The finish line</h2>
+    <p class="note">Finish all 15 days to get your certificate. Take a screenshot and share it.</p>
+    ${certificate(fin === DAYS.length)}
+  </section>` + footer();
+  app.innerHTML = html;
+  app.querySelectorAll(".day-btn").forEach(b => b.onclick = () => openDay(+b.dataset.day));
+  $("#go").onclick = () => { const next = DAYS.find(d => !dayFinished(d.n)); openDay(next ? next.n : 1); };
+  const ni = $("#certName");
+  if (ni) ni.oninput = () => { certName = ni.value; save("gsm-name", certName); $("#certWho").textContent = certName || "Your name"; };
+}
+
+function certificate(open){
+  const today = new Date().toLocaleDateString("en-GB", {day:"numeric", month:"long", year:"numeric"});
+  return `<div class="cert ${open ? "" : "locked"}">
+    <div class="t1">Certificate of completion</div>
+    <div class="t2">Grammar Speaking Marathon</div>
+    <div class="who" id="certWho">${open && certName ? certName : "Your name"}</div>
+    <p>ran all 42.2 km of English grammar for speaking, from B1 to C1.</p>
+    <p class="note">Coach ${CONFIG.coach}, ${today}</p>
+    ${open ? "" : `<div class="lock"><span>🔒 Unlocks at the finish line</span></div>`}
+  </div>
+  ${open ? `<div class="namefield"><input id="certName" placeholder="Type your name" value="${certName.replace(/"/g,"&quot;")}"></div>` : ""}`;
+}
+function footer(){
+  return `<footer>Questions, or want to join the full marathon? Write on Telegram: <a href="https://t.me/${CONFIG.telegram}" target="_blank" rel="noopener">@${CONFIG.telegram}</a></footer>`;
+}
+
+/* ===================== MODALS ===================== */
+const modal = $("#modal"), modalBox = $("#modalBox");
+function openModal(html){ modalBox.innerHTML = html; modal.classList.add("open"); }
+function closeModal(){ modal.classList.remove("open"); }
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+
+let pendingDay = null;
+function openDay(n){
+  const d = DAYS.find(x => x.n === n);
+  if (d.free || unlocked){ location.hash = "day-" + n; return; }
+  pendingDay = n;
+  openModal(`<h2>This day is for marathon runners</h2>
+    <p>Day 1 is free. Enter your access code to open days 2 to 15.</p>
+    <label for="code">Access code</label><input id="code" type="text" autocomplete="off" autocapitalize="characters">
+    <div class="err" id="err"></div>
+    <div class="row"><button class="btn" id="unlockBtn">Open the marathon</button><button class="btn ghost" id="cancelBtn">Cancel</button></div>
+    <p class="note">No code yet? Write to <a href="https://t.me/${CONFIG.telegram}" target="_blank" rel="noopener">@${CONFIG.telegram}</a> on Telegram.</p>`);
+  const inp = $("#code"); inp.focus();
+  const tryIt = () => {
+    if (inp.value.trim().toLowerCase() === CONFIG.accessCode.toLowerCase()){
+      unlocked = true; save("gsm-unlocked", true); closeModal(); location.hash = "day-" + pendingDay;
+    } else $("#err").textContent = "This code doesn’t match. Check it and try again.";
+  };
+  $("#unlockBtn").onclick = tryIt; $("#cancelBtn").onclick = closeModal;
+  inp.onkeydown = e => { if (e.key === "Enter") tryIt(); if (e.key === "Escape") closeModal(); };
+}
+
+/* ===================== DAY PAGE ===================== */
+let curDay = 1, curSt = 0;
+function renderDay(n){
+  const d = DAYS.find(x => x.n === n);
+  if (!d || (!d.free && !unlocked)){ location.hash = ""; return; }
+  curDay = n;
+  const c = CONTENT[n];
+  let html = `<button class="back" id="back">All days</button>
+    <header class="day-head ${d.lv}"><div class="meta">Day ${d.n}, ${d.lv.toUpperCase()}, ${d.part}</div><h1>${d.grammar}</h1><p>${d.use}</p></header>`;
+  if (!c){
+    app.innerHTML = html + `<div class="box" style="margin-top:20px"><p>This day is being prepared. Please check again soon.</p></div>` + footer();
+    $("#back").onclick = () => location.hash = ""; window.scrollTo(0,0); return;
+  }
+  const firstOpen = STATIONS.findIndex((_, i) => !(progress[n] || []).includes(i));
+  curSt = firstOpen === -1 ? 0 : firstOpen;
+  app.innerHTML = html + `<nav class="stations" id="stations" aria-label="Lesson stations"></nav><div id="stationArea"></div>` + footer();
+  $("#back").onclick = () => location.hash = "";
+  window.scrollTo(0,0);
+  renderStation();
+}
+
+function renderNav(){
+  const done = progress[curDay] || [];
+  $("#stations").innerHTML = STATIONS.map((s, i) =>
+    `<button class="st ${i === curSt ? "cur" : ""} ${done.includes(i) ? "done" : ""}" data-st="${i}"><b>${done.includes(i) && i !== curSt ? "✓" : i + 1}</b><span>${s}</span></button>`).join("");
+  document.querySelectorAll(".st").forEach(b => b.onclick = () => { curSt = +b.dataset.st; renderStation(); });
+  const cur = document.querySelector(".st.cur"); if (cur) cur.scrollIntoView({block:"nearest", inline:"center"});
+}
+
+let ANS = {};
+function renderStation(){
+  stopRecording(); clearInterval(clockTimer);
+  ANS = {};
+  renderNav();
+  const s = CONTENT[curDay][curSt];
+  const last = curSt === STATIONS.length - 1;
+  let body = "";
+  const R = RENDER[s.type];
+  body = R.html(s);
+  $("#stationArea").innerHTML = `<section class="station">
+      <div class="kicker">Station ${curSt + 1} of ${STATIONS.length}: ${STATIONS[curSt]}</div>
+      <h2>${s.title}</h2><p class="sub">${s.sub}</p>${body}
+      <div class="nav-row">
+        <button class="btn ghost" id="prevSt" ${curSt === 0 ? "disabled" : ""}>Back</button>
+        <button class="btn" id="nextSt">${last ? "Finish Day " + curDay + " 🏁" : "Next station"}</button>
+      </div></section>`;
+  wireChoices();
+  if (R.setup) R.setup(s);
+  $("#prevSt").onclick = () => { if (curSt > 0){ curSt--; renderStation(); scrollToStations(); } };
+  $("#nextSt").onclick = () => {
+    markStation(curDay, curSt);
+    if (last) celebrate(); else { curSt++; renderStation(); scrollToStations(); }
+  };
+}
+function scrollToStations(){ const el = $("#stations"); if (el) window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 10}); }
+
+function celebrate(){
+  const allDone = dayFinished(curDay);
+  openModal(`<div class="medal">🏅</div><h2>Day ${curDay} finished!</h2>
+    <p>${allDone ? `You’ve run ${kmRun().toFixed(1)} of ${TOTAL_KM} km. Streak: ${streak()} day${streak() === 1 ? "" : "s"}.` : `Go back to any station without a ✓ to finish the whole day.`}</p>
+    <div class="row"><button class="btn" id="toRace">Back to the race</button></div>`);
+  $("#toRace").onclick = () => { closeModal(); location.hash = ""; };
+}
+
+/* ---------- Choice buttons (shared) ---------- */
+let keyN = 0;
+function choiceHTML(o, a, why, fill){
+  const k = "c" + (keyN++); ANS[k] = {a, why, o, fill};
+  return `<div class="choices" data-key="${k}">${o.map((x, i) => `<button class="choice" data-i="${i}">${x}</button>`).join("")}</div><div class="fb" id="fb-${k}"></div>`;
+}
+function wireChoices(){
+  document.querySelectorAll(".choices[data-key]").forEach(g => {
+    const info = ANS[g.dataset.key]; if (!info) return;
+    g.querySelectorAll(".choice").forEach(b => b.onclick = () => {
+      if (g.dataset.solved) return;
+      const ok = +b.dataset.i === info.a, fb = $("#fb-" + g.dataset.key);
+      b.classList.add(ok ? "right" : "wrong");
+      fb.className = "fb " + (ok ? "ok" : "no");
+      fb.textContent = ok ? "✓ " + (info.why || "Correct!") : "Not quite. Try again.";
+      if (ok && info.fill){ const f = document.getElementById(info.fill); if (f) f.textContent = info.o[info.a]; }
+      if (ok){ g.dataset.solved = "1"; g.dispatchEvent(new Event("solved", {bubbles:true})); }
+    });
+  });
+}
+
+/* ---------- Station renderers ---------- */
+function cleanText(s){ return s.toLowerCase().replace(/’/g,"'").replace(/[?.!]/g,"").replace(/\s+/g," ").trim(); }
+const RENDER = {
+  poll: {
+    html: s => `<div class="box">${s.items.map((it, i) => `<div class="qblock"><p class="q">${it[0]}</p>
+        <div class="choices poll" data-p="${i}">${s.options.map(o => `<button class="choice" data-o="${o}">${o}</button>`).join("")}</div></div>`).join("")}</div>
+      <div class="reveal" id="pollOut" hidden></div>`,
+    setup: s => {
+      const picked = {};
+      document.querySelectorAll(".poll").forEach(g => g.querySelectorAll(".choice").forEach(b => b.onclick = () => {
+        g.querySelectorAll(".choice").forEach(x => x.classList.remove("sel")); b.classList.add("sel");
+        picked[g.dataset.p] = b.dataset.o;
+        if (Object.keys(picked).length === s.items.length){
+          const out = $("#pollOut");
+          out.innerHTML = `<p><strong>Your answers as sentences:</strong></p>` +
+            s.items.map((it, i) => `<p style="margin:4px 0">I <mark>${picked[i]}</mark> ${it[1]}.</p>`).join("") +
+            `<p style="margin-top:12px">${s.after}</p>`;
+          out.hidden = false;
+        }
+      }));
+    }
+  },
+  rule: { html: s => s.html },
+  mistakes: {
+    html: s => `<div class="mlist">${s.items.map(m => `<div class="mcard"><p class="bad">✗ ${m.bad}</p><p class="good">✓ ${m.good}</p><p class="why">${m.why}</p></div>`).join("")}</div>
+      <div class="box" style="margin-top:14px"><p class="q">Quick test: right or wrong?</p>${s.test.map(t =>
+        `<div class="qblock"><p>${t.s}</p>${choiceHTML(["✓ Right","✗ Wrong"], t.ok ? 0 : 1, t.why)}</div>`).join("")}</div>`
+  },
+  practice: {
+    html: s => `<div class="box"><p class="q">💬 ${s.chat.title}</p><div class="chat">${s.chat.lines.map((l, i) => {
+          const fid = "fill" + i;
+          return `<div class="bubble ${l.who === "You" ? "me" : ""}"><small>${l.who}</small><p>${l.t.replace("___", `<span class="blank" id="${fid}">___</span>`)}</p>${choiceHTML(l.o, l.a, "", fid)}</div>`;
+        }).join("")}</div></div>
+      <div class="box"><p class="q">🚕 ${s.text.title}</p><p class="note">${s.text.intro}</p>
+        ${s.text.lines.map((l, i) => `<div class="qblock gapline" data-g="${i}">${i + 1}. ${l.t.replace("___", `<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Answer ${i + 1}">`)}<div class="fb"></div></div>`).join("")}
+        <button class="btn" id="gapCheck" style="margin-top:12px">Check answers</button> <span class="score" id="gapScore"></span></div>`,
+    setup: s => {
+      $("#gapCheck").onclick = () => {
+        let right = 0;
+        document.querySelectorAll(".gapline").forEach(row => {
+          const l = s.text.lines[+row.dataset.g], inp = row.querySelector("input"), fb = row.querySelector(".fb");
+          const ok = l.a.map(cleanText).includes(cleanText(inp.value));
+          if (ok) right++;
+          inp.className = ok ? "ok" : "no";
+          fb.className = "fb " + (ok ? "ok" : "no");
+          fb.textContent = ok ? "✓ Correct" : "Answer: " + l.a[0].replace(/'/g, "’");
+        });
+        $("#gapScore").textContent = `${right} of ${s.text.lines.length} correct`;
+      };
+    }
+  },
+  games: {
+    html: s => `<div class="box" id="clock"></div>
+      <div class="box"><p class="q">Build the sentence</p><p class="note">Tap the words in the right order. Tap a word again to take it back.</p><div id="jumbles"></div></div>`,
+    setup: s => { setupClock(s.clock); setupJumble(s.jumble); }
+  },
+  reallife: {
+    html: s => {
+      const p = s.planner;
+      return `<div class="box"><p class="q">1. What do you say?</p>${s.replies.map(r =>
+          `<div class="qblock"><p class="note" style="margin:0">${r.who}</p><p class="q">${r.q}</p>${choiceHTML(r.o, r.a, r.why)}</div>`).join("")}</div>
+        <div class="box"><p class="q">2. ${p.person}’s week</p><p class="note">Look at ${p.person}’s planner. Write 3 or 4 sentences about her. Use always, often, sometimes, never, or once / twice / three times a week.</p>
+          <div class="table-wrap"><table class="planner"><tr><th></th>${p.days.map(d => `<th>${d}</th>`).join("")}</tr>
+          ${p.rows.map(r => `<tr><td>${r[0]}</td>${r[1].map(x => `<td>${x ? "✓" : ""}</td>`).join("")}</tr>`).join("")}</table></div>
+          <textarea id="plannerText" rows="4" placeholder="${p.person} always…"></textarea>
+          <p class="note">Check before you look: did you add -s? (She reads, she goes, she watches…)</p>
+          <button class="btn ghost" id="modelBtn">Compare with a model answer</button>
+          <div class="reveal" id="modelOut" hidden>${p.model}</div></div>
+        <div class="box"><p class="q">3. Your “About me” profile</p><p class="note">Imagine a language exchange app. Complete your profile, then press the button.</p>
+          <div class="form">
+            <label>My name is <input id="pf0" placeholder="Shirin"></label>
+            <label>I live in <input id="pf1" placeholder="Tashkent"></label>
+            <label>On weekdays, I usually <input id="pf2" placeholder="go to work by metro"></label>
+            <label>In my free time, I often <input id="pf3" placeholder="read books"></label>
+            <label>Once a week, I <input id="pf4" placeholder="visit my parents"></label>
+            <label>I never <input id="pf5" placeholder="eat fast food"></label>
+          </div>
+          <button class="btn" id="profileBtn">Make my profile</button>
+          <div id="profileOut"></div></div>`;
+    },
+    setup: s => {
+      $("#modelBtn").onclick = () => { $("#modelOut").hidden = false; };
+      $("#profileBtn").onclick = () => {
+        const v = [0,1,2,3,4,5].map(i => $("#pf" + i).value.trim().replace(/[<>]/g, ""));
+        if (v.slice(2).some(x => !x)){ $("#profileOut").innerHTML = `<p class="fb no">Complete all the sentences first.</p>`; return; }
+        $("#profileOut").innerHTML = `<div class="profile"><div class="pic">${(v[0] || "?")[0].toUpperCase()}</div><div>
+          <strong>${v[0] || "Me"}</strong><small>${v[1] || ""}</small>
+          <p>On weekdays, I <mark>usually</mark> ${v[2]}. In my free time, I <mark>often</mark> ${v[3]}. <mark>Once a week</mark>, I ${v[4]}. I <mark>never</mark> ${v[5]}.</p></div></div>
+          <p class="note">Read it aloud. This is a great start for a Part 1.1 answer!</p>`;
+      };
+    }
+  },
+  speak: {
+    html: s => `<div class="box"><p class="q">The winning formula</p><div class="formula">${s.formula.map(f => `<span>${f}</span>`).join("")}</div>
+        <ul class="starters">${s.starters.map(x => `<li>${x}</li>`).join("")}</ul>
+        <details><summary>See an example answer</summary><p class="q" style="margin-top:10px">${s.example.q}</p><p class="answer">${s.example.a}</p></details></div>
+      <div class="box">${s.questions.map((q, i) => `<div class="qblock"><p class="q">${i + 1}. ${q}</p>
+        <div class="rec"><button class="btn" data-rec="${i}">● Record (30 s)</button><audio controls hidden id="a${i}"></audio></div><div class="note" id="m${i}"></div></div>`).join("")}</div>`,
+    setup: s => document.querySelectorAll("[data-rec]").forEach(b => b.onclick = () => toggleRecord(+b.dataset.rec, b))
+  },
+  feedback: {
+    html: s => `<div class="box">${s.errors.map((e, i) => `<div class="qblock"><div class="tapline" data-e="${i}">${e.s.split(" ").map((w, wi) => `<button class="tapword" data-w="${wi}">${w}</button>`).join("")}</div><div class="fb" id="ef${i}"></div></div>`).join("")}</div>
+      <div class="box check"><p class="q">Self-check after your speaking</p>${s.checklist.map(x => `<label><input type="checkbox"> <span>${x}</span></label>`).join("")}</div>`,
+    setup: s => document.querySelectorAll(".tapline").forEach(line => {
+      const e = s.errors[+line.dataset.e], fb = $("#ef" + line.dataset.e);
+      line.querySelectorAll(".tapword").forEach(b => b.onclick = () => {
+        if (line.dataset.solved) return;
+        if (e.wrong.includes(+b.dataset.w)){ b.classList.add("right"); line.dataset.solved = "1"; fb.className = "fb ok"; fb.textContent = "✓ Correct: " + e.fix; }
+        else { b.classList.add("nope"); fb.className = "fb no"; fb.textContent = "This word is fine. Look again."; }
+      });
+    })
+  }
+};
+
+/* ---------- Beat the clock ---------- */
+let clockTimer = null;
+function setupClock(items){
+  const box = $("#clock"); let best = load("gsm-best-" + curDay, 0);
+  const intro = () => {
+    box.innerHTML = `<div class="clock-top"><span>⏱ 60 seconds</span><span>Best: ${best} of ${items.length}</span></div>
+      <p>Choose the correct answer as fast as you can.</p><button class="btn" id="clockStart">Start</button>`;
+    $("#clockStart").onclick = start;
+  };
+  const start = () => {
+    const qs = shuffle(items); let i = 0, score = 0, left = 60;
+    const show = () => {
+      const q = qs[i];
+      box.innerHTML = `<div class="clock-top"><span>${i + 1} of ${qs.length}</span><span class="timer" id="tLeft">${left}</span></div>
+        <p class="clock-q">${q.q}</p><div class="choices">${q.o.map((o, oi) => `<button class="choice" data-i="${oi}">${o}</button>`).join("")}</div>`;
+      box.querySelectorAll(".choice").forEach(b => b.onclick = () => {
+        const ok = +b.dataset.i === q.a; if (ok) score++;
+        b.classList.add(ok ? "right" : "wrong");
+        box.querySelectorAll(".choice").forEach(x => x.disabled = true);
+        setTimeout(() => { i++; if (i >= qs.length) end(); else show(); }, 450);
+      });
+    };
+    const end = () => {
+      clearInterval(clockTimer);
+      const isBest = score > best; if (isBest){ best = score; save("gsm-best-" + curDay, best); }
+      box.innerHTML = `<div class="clock-top"><span>Finished!</span><span class="timer">${score} of ${qs.length}</span></div>
+        <p>${isBest ? "🎉 New personal best!" : score === qs.length ? "Perfect score!" : "Good run. Can you beat " + best + "?"}</p><button class="btn" id="clockStart">Try again</button>`;
+      $("#clockStart").onclick = start;
+    };
+    clearInterval(clockTimer);
+    clockTimer = setInterval(() => { left--; const t = $("#tLeft"); if (t) t.textContent = left; if (left <= 0) end(); }, 1000);
+    show();
+  };
+  intro();
+}
+
+/* ---------- Build the sentence ---------- */
+function setupJumble(sentences){
+  const host = $("#jumbles");
+  host.innerHTML = sentences.map((s, i) => `<div class="qblock" data-j="${i}"><div class="built chips" id="b${i}"></div><div class="chips" id="p${i}"></div>
+     <div style="margin-top:8px"><button class="btn ghost" data-jc="${i}">Check</button></div><div class="fb" id="jf${i}"></div></div>`).join("");
+  sentences.forEach((s, i) => {
+    const words = s.split(" "); let order = shuffle(words);
+    if (order.join(" ") === s) order = order.slice().reverse();
+    const pool = $("#p" + i), built = $("#b" + i);
+    order.forEach(w => { const c = document.createElement("button"); c.className = "chip"; c.textContent = w;
+      c.onclick = () => { (c.parentElement === pool ? built : pool).appendChild(c); }; pool.appendChild(c); });
+    document.querySelector(`[data-jc="${i}"]`).onclick = () => {
+      const got = [...built.children].map(c => c.textContent).join(" "), fb = $("#jf" + i);
+      if (got === s){ fb.className = "fb ok"; fb.textContent = "✓ " + s + "."; }
+      else { fb.className = "fb no"; fb.textContent = pool.children.length ? "Use all the words first." : "Not quite. Tap words to move them and try again."; }
+    };
+  });
+}
+
+/* ---------- Voice recording ---------- */
+let rec = null, recTimer = null;
+async function toggleRecord(qi, btn){
+  const msg = $("#m" + qi);
+  if (rec && rec.state === "recording"){ stopRecording(); return; }
+  if (!window.MediaRecorder || !navigator.mediaDevices){ msg.textContent = "Recording doesn’t work in this browser. Practise out loud, or use your phone’s voice recorder."; return; }
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({audio:true}); }
+  catch(e){ msg.textContent = "Allow microphone access in your browser to record your answer."; return; }
+  const chunks = []; rec = new MediaRecorder(stream);
+  rec.ondataavailable = e => chunks.push(e.data);
+  rec.onstop = () => {
+    const a = $("#a" + qi); if (a){ a.src = URL.createObjectURL(new Blob(chunks, {type: rec.mimeType})); a.hidden = false; }
+    stream.getTracks().forEach(t => t.stop());
+    btn.classList.remove("recording"); btn.textContent = "● Record again";
+    msg.textContent = "Listen to yourself. Did you use the winning formula?";
+  };
+  rec.start(); msg.textContent = "";
+  let left = 30; btn.classList.add("recording"); btn.textContent = `■ Stop (${left} s)`;
+  recTimer = setInterval(() => { left--; btn.textContent = `■ Stop (${left} s)`; if (left <= 0) stopRecording(); }, 1000);
+}
+function stopRecording(){ clearInterval(recTimer); if (rec && rec.state === "recording") rec.stop(); }
+
+/* ===================== ROUTING ===================== */
+function route(){
+  closeModal(); stopRecording();
+  const m = location.hash.match(/^#day-(\d+)$/);
+  if (m) renderDay(+m[1]); else { renderHome(); window.scrollTo(0,0); }
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
